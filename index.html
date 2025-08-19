@@ -34,11 +34,11 @@
   .rank-actions button { padding:6px 10px; font-size:.9rem; border-radius:6px; border:1px solid #4D9DE0; background:#fff; color:#1A3C5E; cursor:pointer; }
   .rank-actions button:hover{ background:#f0f6ff; }
 
-  /* Q/A buttons & Likert */
+  /* Q buttons & pills */
   .question-box { background:#fff; border:1px solid #4D9DE0; border-radius:8px; padding:16px; margin:14px auto; max-width:760px; }
+  .vertical-list .answer-btn{ margin:8px auto; max-width:760px; }
   .pill { display:inline-block; padding:8px 12px; border-radius:999px; border:1px solid #d0d7de; margin:6px; cursor:pointer; }
   .pill.selected{ background:#3A7FBF; border-color:#3A7FBF; color:#fff; }
-  .vertical-list .answer-btn{ margin:8px auto; max-width:760px; }
 
   /* Results */
   .result-block { margin-bottom:16px; page-break-inside:avoid; padding:16px; border-left:8px solid #4D9DE0; border-radius:8px; background:#fff; }
@@ -47,6 +47,7 @@
   .section-divider{ height:1pt; background-color:#FF4D4D; width:100%; max-width:860px; margin:24pt auto; }
   .subsection-divider{ height:1pt; background-color:rgba(77,157,224,.5); width:100%; max-width:860px; margin:14pt auto; }
   .verse{ font-style:italic; color:#334E7D; text-align:center; margin:4px auto 10px; max-width:820px; }
+  .intro-text{ margin:8px auto 12px; line-height:1.45; }
   .couple-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start; position:relative; padding:10px 0; }
   .couple-grid::before{ content:""; position:absolute; left:50%; top:0; width:2px; height:100%; background:#4D9DE0; transform:translateX(-1px); }
   .partner-card{ border:none; }
@@ -63,7 +64,6 @@
     .couple-grid::before{ display:none; }
   }
 
-  /* print/pdf */
   .html2pdf__page-break { height:0; }
   @media print{
     .btn { display:none !important; }
@@ -81,7 +81,7 @@
   <h1>Discover Your Marriage Connection Profile</h1>
   <div class="intro-text">
     <h3 style="text-align:center;margin-top:0;">Rank your intimacy, then explore your rhythms</h3>
-    <p>This fun couples assessment lets each of you rank the 12 intimacy types, capture how you give and receive love, and reflect on everyday relational dynamics. You’ll get a side-by-side guide with clear next steps.</p>
+    <p>This couples assessment lets each of you rank the 12 intimacy types, capture how you give and receive love, and reflect on everyday relational dynamics. You’ll get a side-by-side guide with clear next steps.</p>
     <p><strong>Couples only:</strong> Partner A goes first, then pass the device to Partner B.</p>
   </div>
   <div class="row" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
@@ -100,7 +100,6 @@
   <div id="questionContainer" class="question-box"></div>
   <div style="display:flex; gap:10px; justify-content:center;">
     <button id="backBtn" class="btn" style="display:none; max-width:160px;">Back</button>
-    <button id="nextBtn" class="btn" style="max-width:220px;">Continue</button>
   </div>
   <p class="muted">HappyMarriageHappyLife.com</p>
 </div>
@@ -108,10 +107,11 @@
 <!-- Results -->
 <div id="resultPage" class="card hidden">
   <img src="https://static.wixstatic.com/media/4d6372_c110ccf05896482192f466d6c0e3c1ae~mv2.png" alt="Logo" style="display:block; margin:0 auto 12px; max-width:200px;" onerror="this.src='https://via.placeholder.com/200x80?text=Logo'">
-  <h2 id="resultsHeader">Your Personalized Connection Profile</h2>
+  <h2 id="resultsHeader">Your Marriage Connection Profile</h2>
   <div id="resultsIntro" class="intro-text">
-    <h3 style="text-align:center;margin-top:0;">Side-by-side insights to grow closer</h3>
-    <p>Below you’ll see each partner’s ranked intimacy types (with definitions), core strengths, growth areas, everyday dynamics, and personalized repair strategies.</p>
+    <h3 style="text-align:center;margin-top:0;">Your Marriage Connection Profile: The Journey Begins</h3>
+    <p>Welcome to your personalized guide to understanding each other in a new way. This profile is built on the Covenant Intimacy Fulfillment Model™ (CIFM). It’s a living map—helping you name what’s true today and aim for what’s possible tomorrow.</p>
+    <p>First you’ll see your ranked intimacy types (with definitions). Then we’ll highlight how you give and receive love, followed by relational dynamics, connection patterns, and personalized conflict strategies.</p>
   </div>
   <div id="results"></div>
   <p class="muted">HappyMarriageHappyLife.com</p>
@@ -134,6 +134,19 @@ const INTIMACY = {
   Sexual:{label:"Sexual Intimacy", desc:"Passionate, exclusive, and sacred physical union."}
 };
 const TYPES = Object.keys(INTIMACY);
+
+const typeColors = {
+  Spiritual:"#6A4C93", Emotional:"#FF7A70", Commitment:"#FFB347",
+  Intellectual:"#4C6B9B", Affable:"#FFB6C1", Recreational:"#4DD2FF",
+  Partnership:"#3CB371", Stability:"#FFD700", Creative:"#FF66CC",
+  Conflict:"#FFA552", Physical:"#FF8C69", Sexual:"#E63946"
+};
+const typeOpac = {
+  Spiritual:"rgba(106,76,147,.08)", Emotional:"rgba(255,122,112,.08)", Commitment:"rgba(255,179,71,.08)",
+  Intellectual:"rgba(76,107,155,.08)", Affable:"rgba(255,182,193,.08)", Recreational:"rgba(77,210,255,.08)",
+  Partnership:"rgba(60,179,113,.08)", Stability:"rgba(255,215,0,.08)", Creative:"rgba(255,102,204,.08)",
+  Conflict:"rgba(255,165,82,.08)", Physical:"rgba(255,140,105,.08)", Sexual:"rgba(230,57,70,.08)"
+};
 
 const scripture = {
   compassionCare: "“Be completely humble and gentle; be patient, bearing with one another in love.” — Ephesians 4:2",
@@ -177,99 +190,122 @@ const conflictStrategies = {
   }
 };
 
-/* ================== State ================== */
+/* ================== Flow/State ================== */
 let partnerAName="", partnerBName="";
 let partnerIndex = 0; // 0 = A, 1 = B
+// Steps: 0 rank, 1 expressed, 2 desired, 3 social1, 4 social2, 5 decision1, 6 decision2, 7 rr1, 8 rr2, 9 bond1, 10 bond2, 11 bond3, 12 bond4
+const TOTAL_STEPS = 13;
 let step = 0;
-const TOTAL_STEPS = 9; // 0:rank, 1:expressedTop2, 2:desiredTop2, 3:social, 4:decision, 5:RR1, 6:RR2, 7:ConflictReact, 8:Unappreciated
 
-// Per-partner temp
-let rankOrder = []; // array of type keys in chosen order
-let expressedTop2 = []; // two selections (give love)
-let desiredTop2 = [];   // two selections (feel loved)
-let socialScore = {E:0,S:0,R:0,A:0,U:0}; // internal buckets; UI shows summary only
-let decisionScore = {E:0,S:0,R:0,A:0,U:0};
-let rrScore = 0;
-let bondingScores = {}; // style tallies
+// per-partner answers
+let answers = {
+  rank: [],               // array of 12 type keys
+  expressedTop2: [],      // ["Playful", ...]
+  desiredTop2:   [],      // ["Warmth", ...]
+  social:   {},           // stepIds -> key
+  decision: {},           // stepIds -> key
+  rr: { rr1:null, rr2:null }, // 0..3
+  bond: {}                // stepIds -> bondingKey
+};
 
-const profiles = []; // [A, B]
+const profiles = []; // two partner result objects
 
-/* ================== UI bootstrap ================== */
+/* ================== Boot ================== */
 document.getElementById('startBtn').onclick = () => {
   partnerAName = document.getElementById('partnerAName').value.trim();
   partnerBName = document.getElementById('partnerBName').value.trim();
-  if(!partnerAName || !partnerBName){
-    alert("Please enter both Partner A and Partner B names to begin.");
-    return;
-  }
-  startPartner(partnerAName);
+  if(!partnerAName || !partnerBName){ alert("Please enter both Partner A and Partner B names to begin."); return; }
+  startPartner(0);
 };
+document.getElementById('backBtn').onclick = () => { if(step>0){ step--; renderStep(); } };
 
-document.getElementById('backBtn').onclick = () => {
-  if(step===0) return;
-  step--;
-  renderStep();
-};
-document.getElementById('nextBtn').onclick = () => {
-  if(!canContinue()) return;
-  step++;
-  if(step<TOTAL_STEPS){ renderStep(); }
-  else { finalizePartner(); }
-};
-
-function startPartner(name){
-  resetTemp();
-  partnerIndex = (name===partnerAName) ? 0 : 1;
+function startPartner(idx){
+  partnerIndex = idx;
+  resetAnswers();
   document.getElementById('introPage').classList.add('hidden');
   document.getElementById('quizPage').classList.remove('hidden');
-  document.getElementById('quizTitle').textContent = `Assessment — ${name}`;
+  document.getElementById('quizTitle').textContent = `Assessment — ${idx===0?partnerAName:partnerBName}`;
   step = 0;
   renderStep();
 }
-
-function resetTemp(){
-  rankOrder = shuffle([...TYPES]);
-  expressedTop2 = [];
-  desiredTop2 = [];
-  socialScore = {E:0,S:0,R:0,A:0,U:0};
-  decisionScore = {E:0,S:0,R:0,A:0,U:0};
-  rrScore = 0;
-  bondingScores = {SteadyConnector:0, ReassuranceSeeker:0, IndependentConnector:0, GuardedConnector:0};
+function resetAnswers(){
+  answers = { rank:[...TYPES], expressedTop2:[], desiredTop2:[], social:{}, decision:{}, rr:{ rr1:null, rr2:null }, bond:{} };
 }
 
-/* ================== Steps Rendering ================== */
+/* ================== Render Steps ================== */
 function renderStep(){
   const progress = document.getElementById('progress');
   const bar = document.getElementById('progressBar');
   progress.textContent = `Step ${step+1} of ${TOTAL_STEPS}`;
   bar.style.width = `${((step+1)/TOTAL_STEPS)*100}%`;
-  document.getElementById('backBtn').style.display = step>0 ? 'block' : 'none';
 
   const box = document.getElementById('questionContainer');
   box.innerHTML = "";
-  if(step===0){ renderRankUI(box); }
-  else if(step===1){ renderPick2UI(box, "How you give love — pick your Top 2 ways you most naturally show love", expressedTop2, setExpressedTop2); }
-  else if(step===2){ renderPick2UI(box, "How you feel most loved — pick your Top 2 ways you most prefer to receive love", desiredTop2, setDesiredTop2); }
-  else if(step===3){ renderSocialQuestion(box); }
-  else if(step===4){ renderDecisionQuestion(box); }
-  else if(step===5){ renderRR1(box); }
-  else if(step===6){ renderRR2(box); }
-  else if(step===7){ renderConflictReact(box); }
-  else if(step===8){ renderUnappreciated(box); }
+  // hide Next (we auto-advance), show only Back except step 0 has its own button
+  document.getElementById('backBtn').style.display = step>0 ? 'block' : 'none';
 
-  document.getElementById('nextBtn').textContent = (step===TOTAL_STEPS-1) ? "See Handoff / Results" : "Continue";
+  if(step===0) return renderRankUI(box);
+  if(step===1) return renderPick2(box, "How you give love — choose your Top 2", "expressedTop2");
+  if(step===2) return renderPick2(box, "How you feel most loved — choose your Top 2", "desiredTop2");
+  if(step===3) return renderSingleList(box, "In groups, I usually…", [
+    ["E","Bring energy and get people talking."],
+    ["S","Organize or give structure to the time."],
+    ["R","Connect deeply with one or two people."],
+    ["A","Keep it light, calm, and agreeable."],
+    ["U","Make sure everyone feels included."]
+  ], key => { answers.social["social1"]=key; next(); });
+  if(step===4) return renderSingleList(box, "Planning social time, I prefer we…", [
+    ["E","Pick lively, people-filled activities."],
+    ["S","Set a plan and keep on track."],
+    ["R","Prioritize meaningful, low-key connection."],
+    ["A","Keep it relaxed and pressure-free."],
+    ["U","Consider others and include them thoughtfully."]
+  ], key => { answers.social["social2"]=key; next(); });
+  if(step===5) return renderSingleList(box, "When a decision is needed, I tend to…", [
+    ["E","Choose the fun option and keep momentum."],
+    ["S","Decide quickly and set direction."],
+    ["R","Analyze details before choosing."],
+    ["A","Seek harmony and avoid friction."],
+    ["U","Support the plan and contribute steadily."]
+  ], key => { answers.decision["decision1"]=key; next(); });
+  if(step===6) return renderSingleList(box, "On shared projects at home, I usually…", [
+    ["E","Keep things upbeat and moving."],
+    ["S","Take the lead and drive results."],
+    ["R","Plan details and set a thoughtful pace."],
+    ["A","Stay flexible and avoid conflict."],
+    ["U","Pitch in steadily and support the plan."]
+  ], key => { answers.decision["decision2"]=key; next(); });
+  if(step===7) return renderSingleList(box, "I feel my opinions are respected in our relationship.", [
+    [3,"Strongly Agree"], [2,"Agree"], [1,"Disagree"], [0,"Strongly Disagree"]
+  ], val => { answers.rr.rr1 = Number(val); next(); });
+  if(step===8) return renderSingleList(box, "We are aligned on core values and honor our covenant.", [
+    [3,"Strongly Agree"], [2,"Agree"], [1,"Disagree"], [0,"Strongly Disagree"]
+  ], val => { answers.rr.rr2 = Number(val); next(); });
+  if(step===9) return renderSingleList(box, "During conflict, I naturally…", [
+    ["SteadyConnector","Use humor to lower tension."],
+    ["ReassuranceSeeker","Push for quick resolution."],
+    ["IndependentConnector","Withdraw to think it through."],
+    ["IndependentConnector","Stay calm to avoid escalation."],
+    ["GuardedConnector","Concede just to end it."]
+  ], key => { answers.bond["bond1"]=key; next(); });
+  if(step===10) return renderSingleList(box, "When I feel unappreciated, I tend to…", [
+    ["SteadyConnector","Laugh it off and move on."],
+    ["ReassuranceSeeker","Remind my spouse of my effort."],
+    ["IndependentConnector","Feel overlooked and pull back."],
+    ["IndependentConnector","Let it go to keep peace."],
+    ["GuardedConnector","Feel hurt and shut down."]
+  ], key => { answers.bond["bond2"]=key; next(); });
+  if(step===11) return renderSingleList(box, "After a disagreement, I prefer to…", [
+    ["ReassuranceSeeker","Repair quickly together."],
+    ["IndependentConnector","Pause, then reconnect with a plan."]
+  ], key => { answers.bond["bond3"]=key; next(); });
+  if(step===12) return renderSingleList(box, "When overwhelmed, I prefer to…", [
+    ["ReassuranceSeeker","Seek closeness and reassurance now."],
+    ["IndependentConnector","Have space first, then return to talk."]
+  ], key => { answers.bond["bond4"]=key; finalizePartner(); });
 }
 
-function canContinue(){
-  if(step===0) return rankOrder && rankOrder.length===12;
-  if(step===1) return expressedTop2.length===2;
-  if(step===2) return desiredTop2.length===2;
-  // others are single-tap questions; we validate inside handlers by setting hidden state
-  return true;
-}
-
-/* ================== Step UIs ================== */
-// (0) Ranking
+/* ---------- Step 0: Ranking ---------- */
 function renderRankUI(root){
   const wrap = document.createElement('div');
   wrap.className = 'rank-wrap';
@@ -277,37 +313,28 @@ function renderRankUI(root){
     <h3 style="text-align:center;">Rank the 12 Intimacy Types</h3>
     <p class="rank-help">Drag to reorder (or use ↑ / ↓). Place your most important at the top.</p>
     <ul id="rankList" class="rank-list"></ul>
+    <button id="rankContinue" class="btn" style="max-width:260px;">Save Ranking & Continue</button>
   `;
   root.appendChild(wrap);
 
   const ul = wrap.querySelector('#rankList');
   refreshRankList(ul);
 
-  // DnD handlers
   let dragEl = null;
   ul.addEventListener('dragstart', e=>{
     if(e.target.classList.contains('rank-item')){
-      dragEl = e.target;
-      e.dataTransfer.effectAllowed = 'move';
-      e.target.classList.add('dragging');
+      dragEl = e.target; e.dataTransfer.effectAllowed='move'; e.target.classList.add('dragging');
     }
   });
-  ul.addEventListener('dragend', e=>{
-    if(dragEl){ dragEl.classList.remove('dragging'); dragEl=null; }
-  });
+  ul.addEventListener('dragend', e=>{ if(dragEl){ dragEl.classList.remove('dragging'); dragEl=null; }});
   ul.addEventListener('dragover', e=>{
     e.preventDefault();
     const after = getDragAfterElement(ul, e.clientY);
     const dragging = ul.querySelector('.dragging');
     if(!dragging) return;
-    if(after==null) ul.appendChild(dragging);
-    else ul.insertBefore(dragging, after);
+    if(after==null) ul.appendChild(dragging); else ul.insertBefore(dragging, after);
   });
-  ul.addEventListener('drop', ()=>{
-    // read current order back to state
-    rankOrder = [...ul.querySelectorAll('.rank-item')].map(li => li.dataset.key);
-    refreshRankList(ul); // to refresh badges
-  });
+  ul.addEventListener('drop', ()=>{ answers.rank = [...ul.querySelectorAll('.rank-item')].map(li=>li.dataset.key); refreshRankList(ul); });
 
   function getDragAfterElement(container, y){
     const els = [...container.querySelectorAll('.rank-item:not(.dragging)')];
@@ -318,10 +345,16 @@ function renderRankUI(root){
       else return closest;
     }, {offset: Number.NEGATIVE_INFINITY}).element;
   }
+
+  document.getElementById('rankContinue').onclick = ()=>{
+    answers.rank = [...ul.querySelectorAll('.rank-item')].map(li=>li.dataset.key);
+    if(answers.rank.length!==12){ alert("Please rank all 12 types."); return; }
+    next();
+  };
 }
 function refreshRankList(ul){
   ul.innerHTML = "";
-  rankOrder.forEach((k, idx)=>{
+  answers.rank.forEach((k, idx)=>{
     const li = document.createElement('li');
     li.className = 'rank-item';
     li.draggable = true;
@@ -339,32 +372,32 @@ function refreshRankList(ul){
     `;
     const [upBtn, downBtn] = li.querySelectorAll('.rank-actions button');
     upBtn.onclick = () => {
-      const i = rankOrder.indexOf(k);
-      if(i>0){ [rankOrder[i-1], rankOrder[i]] = [rankOrder[i], rankOrder[i-1]]; refreshRankList(ul); }
+      const i = answers.rank.indexOf(k);
+      if(i>0){ [answers.rank[i-1], answers.rank[i]] = [answers.rank[i], answers.rank[i-1]]; refreshRankList(ul); }
     };
     downBtn.onclick = () => {
-      const i = rankOrder.indexOf(k);
-      if(i<rankOrder.length-1){ [rankOrder[i+1], rankOrder[i]] = [rankOrder[i], rankOrder[i+1]]; refreshRankList(ul); }
+      const i = answers.rank.indexOf(k);
+      if(i<answers.rank.length-1){ [answers.rank[i+1], answers.rank[i]] = [answers.rank[i], answers.rank[i+1]]; refreshRankList(ul); }
     };
     ul.appendChild(li);
   });
 }
 
-// (1) & (2) pick top-2 expressed/desired
+/* ---------- Pick-2 (steps 1–2) ---------- */
 const affectionOptions = [
-  {key:"Playful", text:"Fun, playful moments and upbeat encouragement."},
-  {key:"Initiative", text:"Taking initiative—solving problems, removing stress."},
-  {key:"DeepTalk", text:"Meaningful conversation and focused time."},
-  {key:"Warmth", text:"Calm presence, reassurance, and gentle touch."},
-  {key:"Support", text:"Practical help and steady teamwork."}
+  {key:"Playful", text:"Playful moments and upbeat encouragement"},
+  {key:"Initiative", text:"Taking initiative—removing stressors"},
+  {key:"DeepTalk", text:"Deep conversation and focused time"},
+  {key:"Warmth", text:"Warm presence and gentle touch"},
+  {key:"Support", text:"Practical help and steady teamwork"}
 ];
-function renderPick2UI(root, title, selected, setter){
+function renderPick2(root, title, field){
+  const selected = answers[field];
   const div = document.createElement('div');
   div.innerHTML = `<h3 style="text-align:center;">${title}</h3>
-    <p class="rank-help">Tap to select two. Your first tap is #1, second tap is #2. Tap again to unselect.</p>
+    <p class="rank-help">Tap to select two. Your first tap is #1, second is #2. Tap again to unselect.</p>
     <div id="pick2Wrap" style="text-align:center;"></div>
-    <p style="text-align:center; margin-top:8px;">Selected: <strong>${selected.map((k,i)=>`${i+1}. ${labelForAffKey(k)}`).join("  ")||"—"}</strong></p>
-  `;
+    <p style="text-align:center; margin-top:8px;">Selected: <strong>${selected.map((k,i)=>`${i+1}. ${labelFor(k)}`).join("  ")||"—"}</strong></p>`;
   root.appendChild(div);
   const wrap = div.querySelector('#pick2Wrap');
   affectionOptions.forEach(o=>{
@@ -373,121 +406,57 @@ function renderPick2UI(root, title, selected, setter){
     pill.textContent = o.text;
     pill.onclick = ()=>{
       if(selected.includes(o.key)){
-        setter(selected.filter(k=>k!==o.key));
+        answers[field] = selected.filter(x=>x!==o.key);
+        renderStep();
       }else{
-        if(selected.length<2) setter([...selected, o.key]);
+        if(selected.length<2){
+          answers[field] = [...selected, o.key];
+          if(answers[field].length===2) return next();
+          renderStep();
+        }
       }
-      renderStep(); // refresh
     };
     wrap.appendChild(pill);
   });
 }
-function labelForAffKey(k){
-  return {
-    Playful:"Playful moments",
-    Initiative:"Taking initiative",
-    DeepTalk:"Deep conversation",
-    Warmth:"Warm presence & touch",
-    Support:"Practical support"
-  }[k] || k;
+function labelFor(k){
+  return {Playful:"Playful moments", Initiative:"Taking initiative", DeepTalk:"Deep conversation", Warmth:"Warm presence & touch", Support:"Practical support"}[k]||k;
 }
-function setExpressedTop2(arr){ expressedTop2 = arr; }
-function setDesiredTop2(arr){ desiredTop2 = arr; }
 
-// (3) Social preferences
-function renderSocialQuestion(root){
-  root.innerHTML = `
-    <h3 style="text-align:center;">In groups, I usually…</h3>
-    <div class="vertical-list">
-      ${btn("Bring energy and get people talking.", ()=>{ socialScore.E++; })}
-      ${btn("Organize or give structure to the time.", ()=>{ socialScore.S++; })}
-      ${btn("Connect deeply with one or two people.", ()=>{ socialScore.R++; })}
-      ${btn("Keep it light, calm, and agreeable.", ()=>{ socialScore.A++; })}
-      ${btn("Make sure everyone feels included.", ()=>{ socialScore.U++; })}
-    </div>
-  `;
+/* ---------- Single-choice helpers ---------- */
+function renderSingleList(root, title, options, onPick){
+  root.innerHTML = `<h3 style="text-align:center;">${title}</h3><div class="vertical-list"></div>`;
+  const v = root.querySelector('.vertical-list');
+  options.forEach(([val, txt])=>{
+    const b = document.createElement('button');
+    b.className = 'answer-btn';
+    b.textContent = txt;
+    b.onclick = ()=> onPick(val);
+    v.appendChild(b);
+  });
 }
-// (4) Power & Control (decisions)
-function renderDecisionQuestion(root){
-  root.innerHTML = `
-    <h3 style="text-align:center;">When a decision is needed, I tend to…</h3>
-    <div class="vertical-list">
-      ${btn("Choose the fun option and keep momentum.", ()=>{ decisionScore.E++; })}
-      ${btn("Decide quickly and set direction.", ()=>{ decisionScore.S++; })}
-      ${btn("Analyze details before choosing.", ()=>{ decisionScore.R++; })}
-      ${btn("Seek harmony and avoid friction.", ()=>{ decisionScore.A++; })}
-      ${btn("Support the plan and contribute steadily.", ()=>{ decisionScore.U++; })}
-    </div>
-  `;
-}
-// (5) RR #1
-function renderRR1(root){
-  root.innerHTML = `
-    <h3 style="text-align:center;">I feel my opinions are respected in our relationship.</h3>
-    <div class="vertical-list">
-      ${btn("Strongly Disagree", ()=>{ rrScore+=0; })}
-      ${btn("Disagree", ()=>{ rrScore+=1; })}
-      ${btn("Agree", ()=>{ rrScore+=2; })}
-      ${btn("Strongly Agree", ()=>{ rrScore+=3; })}
-    </div>
-  `;
-}
-// (6) RR #2
-function renderRR2(root){
-  root.innerHTML = `
-    <h3 style="text-align:center;">We are aligned on core values and honor our covenant.</h3>
-    <div class="vertical-list">
-      ${btn("Strongly Disagree", ()=>{ rrScore+=0; })}
-      ${btn("Disagree", ()=>{ rrScore+=1; })}
-      ${btn("Agree", ()=>{ rrScore+=2; })}
-      ${btn("Strongly Agree", ()=>{ rrScore+=3; })}
-    </div>
-  `;
-}
-// (7) Conflict reaction → bonding
-function renderConflictReact(root){
-  root.innerHTML = `
-    <h3 style="text-align:center;">During conflict, I naturally…</h3>
-    <div class="vertical-list">
-      ${btn("Use humor to lower tension.", ()=>{ bondingScores.SteadyConnector++; })}
-      ${btn("Push for quick resolution.", ()=>{ bondingScores.ReassuranceSeeker++; })}
-      ${btn("Withdraw to think it through.", ()=>{ bondingScores.IndependentConnector++; })}
-      ${btn("Stay calm to avoid escalation.", ()=>{ bondingScores.IndependentConnector++; })}
-      ${btn("Concede just to end it.", ()=>{ bondingScores.GuardedConnector++; })}
-    </div>
-  `;
-}
-// (8) Unappreciated → bonding
-function renderUnappreciated(root){
-  root.innerHTML = `
-    <h3 style="text-align:center;">When I feel unappreciated, I tend to…</h3>
-    <div class="vertical-list">
-      ${btn("Laugh it off and move on.", ()=>{ bondingScores.SteadyConnector++; })}
-      ${btn("Remind my spouse of my effort.", ()=>{ bondingScores.ReassuranceSeeker++; })}
-      ${btn("Feel overlooked and pull back.", ()=>{ bondingScores.IndependentConnector++; })}
-      ${btn("Let it go to keep peace.", ()=>{ bondingScores.IndependentConnector++; })}
-      ${btn("Feel hurt and shut down.", ()=>{ bondingScores.GuardedConnector++; })}
-    </div>
-  `;
-}
-function btn(text, onClick){
-  return `<button class="answer-btn" onclick="(${onClick})();">${text}</button>`;
-}
+
+/* Navigation */
+function next(){ step++; if(step<TOTAL_STEPS) renderStep(); else finalizePartner(); }
 
 /* ================== Build profile & results ================== */
 function finalizePartner(){
   const name = partnerIndex===0 ? partnerAName : partnerBName;
 
-  // Social summary
-  const social = summarizeChoice(socialScore, {
+  // Social/Decision summaries (combine 2 items each)
+  const socialCounts = {E:0,S:0,R:0,A:0,U:0};
+  Object.values(answers.social).forEach(k=> socialCounts[k]++);
+  const decisionCounts = {E:0,S:0,R:0,A:0,U:0};
+  Object.values(answers.decision).forEach(k=> decisionCounts[k]++);
+
+  const socialSummary = toSummary(socialCounts, {
     E:"You bring energy and enthusiasm to social settings.",
     S:"You give structure and help lead groups well.",
     R:"You prefer deep, thoughtful conversations.",
     A:"You value calm, low-key connection.",
     U:"You make sure others feel included and cared for."
   });
-  // Decision summary
-  const decision = summarizeChoice(decisionScore, {
+  const decisionSummary = toSummary(decisionCounts, {
     E:"You decide with enthusiasm, prioritizing enjoyment and momentum.",
     S:"You decide decisively, goal-first.",
     R:"You analyze carefully before choosing.",
@@ -495,23 +464,27 @@ function finalizePartner(){
     U:"You steadily support plans and shared goals."
   });
 
-  // Bonding key
-  const bondingKey = Object.entries(bondingScores).sort((a,b)=>b[1]-a[1])[0]?.[0] || "SteadyConnector";
-  const bondingLabel = bondingInsights[bondingKey].label;
+  // Respect & Recognition
+  const rrScore = (answers.rr.rr1 ?? 0) + (answers.rr.rr2 ?? 0);
+  const rrLabel = rrScore>=5 ? "Strong" : rrScore>=3 ? "Moderate" : "Needs Attention";
+
+  // Bonding style (from 4 items)
+  const bondCounts = {SteadyConnector:0, ReassuranceSeeker:0, IndependentConnector:0, GuardedConnector:0};
+  Object.values(answers.bond).forEach(k=> bondCounts[k]++);
+  const bondingKey = Object.entries(bondCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || "SteadyConnector";
 
   const profile = {
     name,
-    ranking: [...rankOrder],
-    coreTypes: rankOrder.slice(0,4),
-    growthTypes: rankOrder.slice(4,8),
-    untappedTypes: rankOrder.slice(8,12),
-    expressedTop2: [...expressedTop2],
-    desiredTop2: [...desiredTop2],
-    socialSummary: social,
-    decisionSummary: decision,
-    rrScore,
-    rrLabel: rrLabel(rrScore),
-    bondingKey, bondingLabel
+    ranking: [...answers.rank],
+    coreTypes: answers.rank.slice(0,4),
+    growthTypes: answers.rank.slice(4,8),
+    untappedTypes: answers.rank.slice(8,12),
+    expressedTop2: [...answers.expressedTop2],
+    desiredTop2: [...answers.desiredTop2],
+    socialSummary,
+    decisionSummary,
+    rrScore, rrLabel,
+    bondingKey
   };
 
   if(partnerIndex===0){
@@ -524,7 +497,7 @@ function finalizePartner(){
       <div class="result-block" style="text-align:center;">
         <h3 class="section-title" style="margin-top:0;">Thank you, ${name}!</h3>
         <p class="intro-text">Please pass the device to <strong>${partnerBName}</strong> to complete their part. We’ll show both results side-by-side.</p>
-        <button class="btn" style="max-width:240px;" onclick="startPartner(partnerBName)">Start Partner B</button>
+        <button class="btn" style="max-width:240px;" onclick="startPartner(1)">Start Partner B</button>
       </div>
     `;
   } else {
@@ -533,14 +506,9 @@ function finalizePartner(){
   }
 }
 
-function summarizeChoice(scoreMap, textMap){
-  const top = Object.entries(scoreMap).sort((a,b)=>b[1]-a[1])[0]?.[0];
+function toSummary(counts, textMap){
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0];
   return top ? textMap[top] : "You adapt flexibly to different situations.";
-}
-function rrLabel(score){
-  if(score>=5) return "Strong";
-  if(score>=3) return "Moderate";
-  return "Needs Attention";
 }
 
 /* ---------- Results Renderer ---------- */
@@ -554,11 +522,14 @@ function renderResults(){
   const container = document.createElement('div');
   container.id = "couplesReport";
 
-  /* Section 1: Ranked Intimacy + Core/Growth/Untapped + Affection top-2 */
+  /* Section 1: Intimacy */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
-    <div class="intro-text">You each ranked the 12 types by importance. Use these as a starting point for weekly connection plans.</div>
+    <div class="intro-text">
+      This section is all about understanding intimacy—not just physical closeness, but the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It begins with your ranked list (with definitions).
+      <p>Then we show how you naturally express love and how you feel most loved (Top-2 each), followed by Areas for Growth (next four types) and Untapped Opportunities (lowest four types).</p>
+    </div>
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Ranked Lists (with Definitions)</h4>
@@ -599,10 +570,14 @@ function renderResults(){
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
+    <div class="intro-text">
+      These everyday rhythms show how you care for each other, engage socially, share influence, and honor one another. Use the prompts to turn insights into action.
+    </div>
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Compassion & Care</h4>
     <div class="verse">${scripture.compassionCare}</div>
+    <p class="intro-text">How love is given and received. These are your top ways of expressing care and feeling cared for.</p>
     <div class="couple-grid">
       ${compassionColumn(A)}${compassionColumn(B)}
     </div>
@@ -614,6 +589,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Social Preferences</h4>
     <div class="verse">${scripture.socialEngagement}</div>
+    <p class="intro-text">How you recharge and engage around people—so you can balance connection and personal space.</p>
     <div class="couple-grid">
       ${simpleBlock(A.name, "Your Social Energy", A.socialSummary)}
       ${simpleBlock(B.name, "Your Social Energy", B.socialSummary)}
@@ -626,18 +602,20 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Power & Control</h4>
     <div class="verse">${scripture.decisionLeadership}</div>
+    <p class="intro-text">How you navigate decisions and leadership—so collaboration feels respectful and safe.</p>
     <div class="couple-grid">
       ${simpleBlock(A.name, "Your Leadership Style", A.decisionSummary)}
       ${simpleBlock(B.name, "Your Leadership Style", B.decisionSummary)}
     </div>
     ${promptsBlock([
-      "<em>A Shared Decision:</em> Choose a decision you have this week. Combine your styles for the best outcome.",
+      "<em>A Shared Decision:</em> Choose one decision you have this week. Combine your styles for the best outcome.",
       "<em>A Trust Check-in:</em> Ask, “When do you feel most respected in our decision-making?”"
     ])}
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Respect & Recognition</h4>
     <div class="verse">${scripture.respectRecognition}</div>
+    <p class="intro-text">How each partner is valued, affirmed, and honored for who they are.</p>
     <div class="couple-grid">
       ${rrColumn(A)}${rrColumn(B)}
     </div>
@@ -655,6 +633,7 @@ function renderResults(){
     <div class="section-divider"></div>
     <h3 class="section-title">Section 3: Connection Patterns</h3>
     <div class="verse">${scripture.connectionPattern}</div>
+    <p class="intro-text">Your typical pattern in tension—what helps, what hinders, and how to repair well.</p>
     <div class="couple-grid">
       ${patternColumn(A)}${patternColumn(B)}
     </div>
@@ -670,8 +649,8 @@ function renderResults(){
 
     <div class="section-divider"></div>
     <div class="framed-highlight">
-      <h3 class="section-title" style="margin-top:0;">Continuing Connection Challenge</h3>
-      <p class="intro-text">Each week, choose one insight—explore an untapped opportunity, lean into a core strength, or apply a conflict strategy—and try it together.</p>
+      <h3 class="section-title" style="margin-top:0;">Thank You</h3>
+      <p class="intro-text">Use these insights as a fun tool for introspection and spouse discovery. Choose one insight each week—explore an untapped opportunity, lean into a core strength, or apply a conflict strategy—and try it together.</p>
     </div>
 
     <div class="section-divider"></div>
@@ -716,20 +695,17 @@ function renderResults(){
         pagebreak:{ mode:['css','legacy'] }
       };
       await html2pdf().set(opt).from(target).save();
-    } finally {
-      document.body.classList.remove('no-anim');
-      window.scrollTo(prevX, prevY);
-    }
+    } finally { document.body.classList.remove('no-anim'); window.scrollTo(prevX, prevY); }
   };
 }
 
-/* ---------- small render helpers ---------- */
+/* ---------- results helpers (colored) ---------- */
 function rankedColumn(p){
   return `
     <div class="partner-card"><div class="partner-inner">
       <div class="partner-header">${p.name}</div>
       ${p.ranking.map((k,i)=>`
-        <div class="result-block">
+        <div class="result-block" style="border-left-color:${typeColors[k]}; background:${typeOpac[k]};">
           <strong>${i+1}. ${INTIMACY[k].label}</strong>
           <div style="margin-top:6px;">${INTIMACY[k].desc}</div>
         </div>
@@ -742,7 +718,7 @@ function typesColumn(name, types){
     <div class="partner-card"><div class="partner-inner">
       <div class="partner-header">${name}</div>
       ${types.map(k=>`
-        <div class="result-block">
+        <div class="result-block" style="border-left-color:${typeColors[k]}; background:${typeOpac[k]};">
           <strong>${INTIMACY[k].label}</strong> — ${INTIMACY[k].desc}
         </div>
       `).join("")}
@@ -769,13 +745,7 @@ function affectionColumn(name, expressed2, desired2){
   `;
 }
 function affText(k){
-  return {
-    Playful:"Playful moments and upbeat encouragement",
-    Initiative:"Spouse takes initiative / removes stress",
-    DeepTalk:"Deep, meaningful conversation",
-    Warmth:"Warm presence, reassurance, gentle touch",
-    Support:"Practical support and steady teamwork"
-  }[k] || k;
+  return {Playful:"Playful moments and encouragement", Initiative:"Taking initiative / removing stress", DeepTalk:"Deep conversation & focused time", Warmth:"Warm presence & gentle touch", Support:"Practical support & teamwork"}[k]||k;
 }
 function compassionColumn(p){
   return `
@@ -843,15 +813,6 @@ function promptsBlock(items){
       </ul>
     </div>
   `;
-}
-
-/* ================== Utilities ================== */
-function shuffle(arr){
-  for(let i=arr.length-1;i>0;i--){
-    const j = Math.floor(Math.random()*(i+1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
 }
 </script>
 </body>
