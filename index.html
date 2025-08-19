@@ -538,7 +538,6 @@ function finalizePartner(){
   }
 }
 
-/* ---------- Results Renderer ---------- */
 function renderResults(){
   document.getElementById('quizPage').classList.add('hidden');
   document.getElementById('resultPage').classList.remove('hidden');
@@ -549,25 +548,20 @@ function renderResults(){
   const container = document.createElement('div');
   container.id = "couplesReport";
 
-  /* Section 1: Intimacy */
+  /* ================== SECTION 1 (UPDATED) ================== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
     <div class="intro-text">
-      This section is all about understanding intimacy—not just physical closeness, but the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It begins with your ranked list (with definitions).
-      <p>Then we show Core Connection Strengths (top four), Areas for Growth (next four), and Untapped Opportunities (lowest four), each with simple prompts to turn insight into action.</p>
+      This section reveals your unique connection profile, showing how you naturally express and receive intimacy. Think of your results as a guide to your relationship's most vibrant and rewarding pathways.
     </div>
 
-    <div class="subsection-divider"></div>
-    <h4 class="subsection-title">Your Ranked Lists (with Definitions)</h4>
-    <div class="couple-grid">
-      ${rankedColumn(A)}${rankedColumn(B)}
-    </div>
+    <!-- (Removed: Ranked Lists with Definitions) -->
 
     <div class="subsection-divider"></div>
-    <h4 class="subsection-title">Core Connection Strengths (Top 4 Types)</h4>
+    <h4 class="subsection-title">Your Core Connection Strengths</h4>
     <div class="verse">${scripture.coreStrengths}</div>
-    <p class="intro-text">Your Core Connection Strengths are where your love naturally shines. Build here to gain momentum and feel more fully seen and cherished by your spouse.</p>
+    <p class="intro-text">Based on your unique profile, these are your most fulfilling and effortless pathways to deeper closeness. They highlight your natural strengths and the incredible ways you both genuinely thrive.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.coreTypes)}
       ${typesColumn(B.name, B.coreTypes)}
@@ -579,9 +573,9 @@ function renderResults(){
     ])}
 
     <div class="subsection-divider"></div>
-    <h4 class="subsection-title">Areas for Growth (Next 4 Types)</h4>
+    <h4 class="subsection-title">Your Areas for Growth</h4>
     <div class="verse">${scripture.areasForGrowth}</div>
-    <p class="intro-text">Familiar but less dominant pathways of connection. With intention, they can blossom and add new depth.</p>
+    <p class="intro-text">You'll find these areas are truly wonderful opportunities for intentional focus. With just a bit of practice and presence, you can absolutely deepen your connection in these types of intimacy.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.growthTypes)}
       ${typesColumn(B.name, B.growthTypes)}
@@ -593,9 +587,9 @@ function renderResults(){
     ])}
 
     <div class="subsection-divider"></div>
-    <h4 class="subsection-title">Untapped Opportunities (Lowest 4 Types)</h4>
+    <h4 class="subsection-title">Your Untapped Opportunities</h4>
     <div class="verse">${scripture.untappedOpps}</div>
-    <p class="intro-text">Invitations to discover new ways of connecting. Try a tiny, no-pressure experiment and treat it as a fun exploration together.</p>
+    <p class="intro-text">These aren't weaknesses at all! Think of them as exciting, untapped gifts for you to discover as a couple. Embracing these new avenues of connection will add surprising depth and vibrant excitement to your marriage.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.untappedTypes)}
       ${typesColumn(B.name, B.untappedTypes)}
@@ -607,7 +601,7 @@ function renderResults(){
     ])}
   `;
 
-  /* Section 2: Relational Dynamics */
+  /* ================== SECTION 2 (unchanged from your current build) ================== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
@@ -624,7 +618,7 @@ function renderResults(){
       ${compassionColumn(B)}
     </div>
     ${promptsBlock([
-      "<em>A \"Love Note\" to Each Other:</em> Using your spouse’s “receive love” picks, write a one-sentence appreciation you’ll do this week.",
+      "<em>A \\\"Love Note\\\" to Each Other:</em> Using your spouse’s “receive love” picks, write a one-sentence appreciation you’ll do this week.",
       "<em>A Curious Question:</em> “What’s one small thing I could do today that would help you feel especially cared for?”"
     ])}
 
@@ -636,7 +630,7 @@ function renderResults(){
     ${temperamentBlock(B.name, "Your Social Energy", B.socialSummary, B.socialTop)}
     ${promptsBlock([
       "<em>The Best of Both Worlds:</em> Share one activity that energizes you with people and one that renews you in quiet.",
-      "<em>A \"We & Me\" Plan:</em> Pick one together-activity and one solo recharge this week."
+      "<em>A \\\"We & Me\\\" Plan:</em> Pick one together-activity and one solo recharge this week."
     ])}
 
     <div class="subsection-divider"></div>
@@ -657,12 +651,12 @@ function renderResults(){
     ${rrCard(A)}
     ${rrCard(B)}
     ${promptsBlock([
-      "<em>A \"High Five\" Moment:</em> Share a specific time you felt appreciated this week.",
-      "<em>The \"One Thing\" Challenge:</em> Each choose one concrete way to honor your spouse this week."
+      "<em>A \\\"High Five\\\" Moment:</em> Share a specific time you felt appreciated this week.",
+      "<em>The \\\"One Thing\\\" Challenge:</em> Each choose one concrete way to honor your spouse this week."
     ])}
   `;
 
-  /* Section 3: Connection Patterns + strategies (stacked cards) */
+  /* ================== SECTION 3 (unchanged from your current build) ================== */
   const aToB = conflictStrategies[A.bondingKey][B.bondingKey];
   const bToA = conflictStrategies[B.bondingKey][A.bondingKey];
 
