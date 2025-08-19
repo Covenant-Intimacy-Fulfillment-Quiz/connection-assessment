@@ -47,7 +47,7 @@
   .subsection-title { color:#1A3C5E; font-family:'Roboto',sans-serif; font-weight:600; font-size:14pt; margin: 15px 0 8px; text-align:center; }
   .section-divider{ height:1pt; background-color:#FF4D4D; width:100%; max-width:860px; margin:24pt auto; }
   .subsection-divider{ height:1pt; background-color:rgba(77,157,224,.5); width:100%; max-width:860px; margin:14pt auto; }
-  .verse{ font-family:'Merriweather', serif; font-style:italic; color:#334E7D; text-align:center; margin:4px auto 10px; max-width:820px; }
+  .verse{ font-family:'Merriweather', serif; font-style:italic; color:#FF4D4D; text-align:center; margin:4px auto 10px; max-width:820px; }
   .intro-text{ margin:8px auto 12px; line-height:1.45; }
   .couple-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start; position:relative; padding:10px 0; }
   .couple-grid::before{ content:""; position:absolute; left:50%; top:0; width:2px; height:100%; background:#4D9DE0; transform:translateX(-1px); }
@@ -65,6 +65,8 @@
     border-radius:8px; padding:16px; margin:16px 0;
   }
 
+  .partner-subhead{ text-align:center; margin:6px 0 6px; }
+
   @media (max-width:700px){
     .couple-grid{ grid-template-columns:1fr; }
     .couple-grid::before{ display:none; }
@@ -76,11 +78,13 @@
 <!-- Intro -->
 <div id="introPage" class="card">
   <img src="https://static.wixstatic.com/media/4d6372_c110ccf05896482192f466d6c0e3c1ae~mv2.png" alt="Logo" style="display:block; margin:0 auto 12px; max-width:200px;" onerror="this.src='https://via.placeholder.com/200x80?text=Logo'">
-  <h1>Discover Your Marriage Connection Profile</h1>
+  <h1>Your Guide to a Deeper Connection</h1>
   <div class="intro-text">
-    <h3 style="text-align:center;margin-top:0;">Rank your intimacy, then explore your rhythms</h3>
-    <p>This couples assessment lets each of you rank the 12 intimacy types, capture how you give and receive love, and reflect on everyday relational dynamics. You’ll get a side-by-side guide with clear next steps.</p>
-    <p><strong>Couples only:</strong> Partner A goes first, then pass the device to Partner B.</p>
+    <p style="text-align:center;"><em>Ready for a few “aha!” moments together?</em></p>
+    <p>This is a moment for the two of you to connect. You’ll each take a few minutes to share your perspective on what builds intimacy and how you navigate daily life as a couple.</p>
+    <p>When you're both done, you'll see your combined results with fun insights and practical ideas to support each other even better.</p>
+    <p><strong>How it works:</strong></p>
+    <p>Pick someone to go first. When they're finished, hand the device over to your partner. Easy!</p>
   </div>
   <div class="row" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
     <input id="partnerAName" class="input" placeholder="Partner A name" aria-label="Partner A name" style="border:1px solid #4D9DE0; border-radius:8px; padding:10px 12px; min-width:220px;">
@@ -160,15 +164,14 @@ const scripture = {
   thankYou: "“May the Lord make your love increase and overflow for each other and for everyone else, just as ours does for you.” — 1 Thessalonians 3:12"
 };
 
-/* Temperament accent mapping (requested palette) */
+/* Temperament accent mapping (Sanguine/Choleric/Melancholy/Phlegmatic/Supine palette) */
 function temperamentAccentFromKey(k){
-  // k can be 'E','S','R','A','U' or expressed/desired keys
   const map = {
-    E: { color: typeColors.Emotional,    bg: typeOpac.Emotional    }, // Sanguine → redish
-    S: { color: typeColors.Commitment,   bg: typeOpac.Commitment   }, // Choleric → yellowish
-    R: { color: typeColors.Intellectual, bg: typeOpac.Intellectual }, // Melancholy → bluish purple (Intellectual)
-    A: { color: typeColors.Affable,      bg: typeOpac.Affable      }, // Phlegmatic → pink
-    U: { color: typeColors.Partnership,  bg: typeOpac.Partnership  }  // Supine → green
+    E: { color: typeColors.Emotional,    bg: typeOpac.Emotional    }, // Sanguine (redish)
+    S: { color: typeColors.Commitment,   bg: typeOpac.Commitment   }, // Choleric (yellowish)
+    R: { color: typeColors.Intellectual, bg: typeOpac.Intellectual }, // Melancholy (bluish/purple)
+    A: { color: typeColors.Affable,      bg: typeOpac.Affable      }, // Phlegmatic (pink)
+    U: { color: typeColors.Partnership,  bg: typeOpac.Partnership  }  // Supine (green)
   };
   return map[k] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
 }
@@ -604,7 +607,7 @@ function renderResults(){
     ])}
   `;
 
-  /* Section 2: Relational Dynamics (with prompts) */
+  /* Section 2: Relational Dynamics */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
@@ -629,10 +632,8 @@ function renderResults(){
     <h4 class="subsection-title">Social Preferences</h4>
     <div class="verse">${scripture.socialEngagement}</div>
     <p class="intro-text">How you recharge and engage around people—so you can balance connection and personal space.</p>
-    <div class="couple-grid">
-      ${temperamentBlock(A.name, "Your Social Energy", A.socialSummary, A.socialTop)}
-      ${temperamentBlock(B.name, "Your Social Energy", B.socialSummary, B.socialTop)}
-    </div>
+    ${temperamentBlock(A.name, "Your Social Energy", A.socialSummary, A.socialTop)}
+    ${temperamentBlock(B.name, "Your Social Energy", B.socialSummary, B.socialTop)}
     ${promptsBlock([
       "<em>The Best of Both Worlds:</em> Share one activity that energizes you with people and one that renews you in quiet.",
       "<em>A \"We & Me\" Plan:</em> Pick one together-activity and one solo recharge this week."
@@ -642,10 +643,8 @@ function renderResults(){
     <h4 class="subsection-title">Power & Control</h4>
     <div class="verse">${scripture.decisionLeadership}</div>
     <p class="intro-text">How you navigate decisions and leadership—so collaboration feels respectful and safe.</p>
-    <div class="couple-grid">
-      ${temperamentBlock(A.name, "Your Leadership Style", A.decisionSummary, A.decisionTop)}
-      ${temperamentBlock(B.name, "Your Leadership Style", B.decisionSummary, B.decisionTop)}
-    </div>
+    ${temperamentBlock(A.name, "Your Leadership Style", A.decisionSummary, A.decisionTop)}
+    ${temperamentBlock(B.name, "Your Leadership Style", B.decisionSummary, B.decisionTop)}
     ${promptsBlock([
       "<em>A Shared Decision:</em> Choose one decision you have this week. Combine your styles for the best outcome.",
       "<em>A Trust Check-in:</em> Ask, “When do you feel most respected in our decision-making?”"
@@ -655,10 +654,8 @@ function renderResults(){
     <h4 class="subsection-title">Respect & Recognition</h4>
     <div class="verse">${scripture.respectRecognition}</div>
     <p class="intro-text">How each partner is valued, affirmed, and honored for who they are.</p>
-    <div class="couple-grid">
-      ${rrColumn(A)}
-      ${rrColumn(B)}
-    </div>
+    ${rrCard(A)}
+    ${rrCard(B)}
     ${promptsBlock([
       "<em>A \"High Five\" Moment:</em> Share a specific time you felt appreciated this week.",
       "<em>The \"One Thing\" Challenge:</em> Each choose one concrete way to honor your spouse this week."
@@ -699,7 +696,7 @@ function renderResults(){
   document.getElementById('results').appendChild(container);
 }
 
-/* ---------- results helpers (colored) ---------- */
+/* ---------- results helpers ---------- */
 function rankedColumn(p){
   return `
     <div class="partner-card"><div class="partner-inner">
@@ -726,49 +723,54 @@ function typesColumn(name, types){
   `;
 }
 function compassionColumn(p){
-  // Render each expressed/desired item with a colored marker per temperament mapping
-  const expressedLis = p.expressedTop2.map((k,i)=>{
+  const expressedBlocks = p.expressedTop2.map(k=>{
     const acc = temperamentAccentFromAffKey(k);
-    return `<li style="border-left:6px solid ${acc.color}; padding-left:8px;">${i+1}. ${affText(k)}</li>`;
+    return `
+      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+        ${affText(k)}
+      </div>
+    `;
   }).join("");
-  const desiredLis = p.desiredTop2.map((k,i)=>{
+  const desiredBlocks = p.desiredTop2.map(k=>{
     const acc = temperamentAccentFromAffKey(k);
-    return `<li style="border-left:6px solid ${acc.color}; padding-left:8px;">${i+1}. ${affText(k)}</li>`;
+    return `
+      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+        ${affText(k)}
+      </div>
+    `;
   }).join("");
   return `
     <div class="partner-card"><div class="partner-inner">
       <div class="partner-header">${p.name}</div>
-      <div class="result-block" style="border-left-color:${typeColors.Emotional}; background:${typeOpac.Emotional};">
-        <strong>How You Express Love (Top-2)</strong>
-        <ul class="results-list" style="margin-top:6px;">${expressedLis}</ul>
-      </div>
-      <div class="result-block" style="border-left-color:${typeColors.Emotional}; background:${typeOpac.Emotional};">
-        <strong>How You Feel Most Loved (Top-2)</strong>
-        <ul class="results-list" style="margin-top:6px;">${desiredLis}</ul>
-      </div>
+
+      <div class="partner-subhead"><strong>${p.name} — You Express Love</strong></div>
+      ${expressedBlocks}
+
+      <div class="partner-subhead"><strong>${p.name} — You Feel Most Loved</strong></div>
+      ${desiredBlocks}
     </div></div>
   `;
 }
 function temperamentBlock(name, title, text, topKey){
   const acc = temperamentAccentFromKey(topKey);
   return `
-    <div class="partner-card"><div class="partner-inner">
-      <div class="partner-header">${name}</div>
-      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-        <strong>${title}:</strong> ${text}
-      </div>
-    </div></div>
+    <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+      <strong>${name} — ${title}:</strong> ${text}
+    </div>
   `;
 }
-function rrColumn(p){
+function rrAccent(label){
+  if(label==="Strong")   return { color:typeColors.Partnership, bg:typeOpac.Partnership };  // green
+  if(label==="Moderate") return { color:typeColors.Commitment,  bg:typeOpac.Commitment  }; // yellow
+  return { color:typeColors.Emotional, bg:typeOpac.Emotional };                              // red
+}
+function rrCard(p){
+  const acc = rrAccent(p.rrLabel);
   return `
-    <div class="partner-card"><div class="partner-inner">
-      <div class="partner-header">${p.name}</div>
-      <div class="result-block" style="border-left-color:${typeColors.Stability}; background:${typeOpac.Stability};">
-        <strong>Respect & Recognition:</strong> ${p.rrLabel} (${p.rrScore}/6)
-        <p style="margin:8px 0 0;">${rrStatement(p.rrScore)}</p>
-      </div>
-    </div></div>
+    <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+      <strong>${p.name} — Respect &amp; Recognition:</strong> ${p.rrLabel} (${p.rrScore}/6)
+      <p style="margin:8px 0 0;">${rrStatement(p.rrScore)}</p>
+    </div>
   `;
 }
 function patternColumn(p){
