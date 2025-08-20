@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Marriage Connection Assessment — Couples (Ranked)</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Open+Sans:wght@600;700&family=Merriweather:ital,wght@1,400;1,700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Open+Sans:wght@600;700&family=Merriweather:ital,wght@1,400;1,700&family=Pacifico&display=swap" rel="stylesheet">
 <style>
   body { font-family: Arial, sans-serif; background:#FFF9F2; color:#1A3C5E; max-width: 980px; margin:auto; padding:20px; box-sizing:border-box; }
   h1,h2,h3,h4{ text-align:center; line-height:1.25; }
@@ -71,14 +71,14 @@
 
   .partner-subhead{ text-align:center; margin:6px 0 6px; }
 
-  /* Friendly Thank You title */
+  /* Friendly Thank You title centered in Pacifico */
   .thank-title{
     margin-top:0;
-    font-family:'Quicksand', sans-serif;
+    font-family:'Pacifico', cursive;
     color:#4D9DE0;
-    font-size:2rem; /* larger, warm & friendly */
+    font-size:2.2rem; /* larger, warm & friendly */
     line-height:1.2;
-    text-align:left;
+    text-align:center;
   }
 
   @media (max-width:700px){
@@ -166,6 +166,7 @@ const typeOpac = {
   Conflict:"rgba(255,165,82,.08)", Physical:"rgba(255,140,105,.08)", Sexual:"rgba(230,57,70,.08)"
 };
 
+/* Scripture catalogue */
 const scripture = {
   coreStrengths: "“Above all, love each other deeply, because love covers over a multitude of sins.” — 1 Peter 4:8",
   areasForGrowth: "“Let us consider how we may spur one another on toward love and good deeds.” — Hebrews 10:24",
@@ -196,6 +197,69 @@ function temperamentAccentFromAffKey(k){
   const t = { Playful:"E", Initiative:"S", DeepTalk:"R", Warmth:"A", Support:"U" }[k];
   return temperamentAccentFromKey(t);
 }
+
+/* Rich copy for Compassion & Care (expressed/desired) */
+const affEXP = {
+  Playful: "You naturally lift the mood with humor, lightness, and spontaneous moments that say, “I’m with you.” You turn ordinary spaces into warm, safe places.",
+  Initiative: "You show love by stepping in and taking pressure off—solving problems, removing obstacles, and protecting what matters to your spouse.",
+  DeepTalk: "You invite depth—lingering in meaningful conversation, asking curious questions, and making your spouse feel profoundly understood.",
+  Warmth: "You offer steady presence and gentle affection. Your calming tone, touch, and attention help your spouse exhale and feel safe.",
+  Support: "You love through action: pitching in, following through, and sharing the load. Your reliability says, “You’re not alone—I'm with you.”"
+};
+const affDES = {
+  Playful: "You feel loved when your spouse keeps things light, playful, and hope-filled—like a little breath of fresh air when life feels heavy.",
+  Initiative: "You feel most cared for when your spouse takes initiative—removing stress, solving a problem, or leading with strength and protection.",
+  DeepTalk: "You feel cherished when your spouse slows down, listens deeply, and engages your thoughts and heart with focused, meaningful time.",
+  Warmth: "You feel secure with gentle presence, unhurried attention, and comforting touch that says, “I’m here, and you matter.”",
+  Support: "You feel honored when your spouse helps practically—sharing responsibilities and showing up consistently in the daily things."
+};
+
+/* Rich copy for Social/Decision (what it looks like + watch-outs + tips) */
+const temperamentDetails = {
+  E: {
+    looks: "You energize the room and move things forward with enthusiasm.",
+    watch: "Fast pace can out-run deeper needs or quieter voices.",
+    tip: "Schedule both lively connection and quiet check-ins to stay balanced."
+  },
+  S: {
+    looks: "You provide direction, set goals, and protect progress.",
+    watch: "Decisiveness can feel controlling if not co-authored.",
+    tip: "Invite input early and name where you’re flexible."
+  },
+  R: {
+    looks: "You think deeply, ask great questions, and value thoughtfulness.",
+    watch: "Over-analysis can delay decisions or feel distant.",
+    tip: "Time-box decisions and surface feelings—not just facts."
+  },
+  A: {
+    looks: "You bring calm, keep the peace, and reduce friction.",
+    watch: "Avoiding tension can postpone needed clarity.",
+    tip: "Name one concrete next step even when keeping it gentle."
+  },
+  U: {
+    looks: "You serve steadily, include others, and build trust.",
+    watch: "Understating your needs can lead to quiet resentment.",
+    tip: "Voice one specific need and one boundary you appreciate."
+  }
+};
+
+/* Extra nuances for Respect & Recognition */
+function rrExtra(label){
+  if(label==="Strong"){
+    return "You generally feel honored and seen—keep naming specific appreciations to reinforce that culture.";
+  } else if(label==="Moderate"){
+    return "You’re often valued, but clarity helps. Agree on simple ways to say “I see you” each week.";
+  }
+  return "Name the kinds of affirmation that matter to you and invite your spouse to try one daily for a week.";
+}
+
+/* Extra repair tips for Connection Patterns */
+const patternExtras = {
+  SteadyConnector: "Use a short “check-in” ritual (5 minutes daily) so small tensions resolve early.",
+  ReassuranceSeeker: "Agree on a quick reassurance phrase, then pause to prevent spirals.",
+  IndependentConnector: "Set a clear “return time” after space so distance doesn’t become disconnection.",
+  GuardedConnector: "Start with micro-trust gestures (small keeps) before heavy talk."
+};
 
 /* ================== Flow/State ================== */
 let partnerAName="", partnerBName="";
@@ -642,8 +706,8 @@ function renderResults(){
     <h4 class="subsection-title">Social Preferences</h4>
     <div class="verse">${scripture.socialEngagement}</div>
     <p class="intro-text">This dynamic is all about how you both recharge and engage with the world around you. It explores whether you feel energized by being with others (extraversion), find deep renewal in solitude (introversion), or perhaps thrive with a mix of both (ambiversion). Understanding these unique preferences is key to helping you and your spouse beautifully balance your needs for connection and personal space, ensuring you both feel filled up and ready to encourage each other daily.</p>
-    ${temperamentBlock(A.name, "Your Social Energy", A.socialSummary, A.socialTop)}
-    ${temperamentBlock(B.name, "Your Social Energy", B.socialSummary, B.socialTop)}
+    ${temperamentBlock(A.name, "Your Social Energy", buildTemperamentText(A.socialTop, A.socialSummary), A.socialTop)}
+    ${temperamentBlock(B.name, "Your Social Energy", buildTemperamentText(B.socialTop, B.socialSummary), B.socialTop)}
     ${promptsBlock([
       "<em>The Best of Both Worlds:</em> Share one activity that energizes you with people and one that renews you in quiet.",
       "<em>A \\\"We & Me\\\" Plan:</em> Pick one together-activity and one solo recharge this week."
@@ -653,8 +717,8 @@ function renderResults(){
     <h4 class="subsection-title">Power & Control</h4>
     <div class="verse">${scripture.decisionLeadership}</div>
     <p class="intro-text">This dynamic explores how you navigate decisions and leadership within your relationship, and how you approach influence and authority. It's all about how decisions are made, roles are shared, and influence is balanced. Understanding this helps you create a structure where shared responsibility and collaboration feel both respectful and safe. At its heart, this dynamic helps you wisely answer the question: "Who gets to decide?"—ensuring balance and mutual honor in your daily interactions.</p>
-    ${temperamentBlock(A.name, "Your Leadership Style", A.decisionSummary, A.decisionTop)}
-    ${temperamentBlock(B.name, "Your Leadership Style", B.decisionSummary, B.decisionTop)}
+    ${temperamentBlock(A.name, "Your Leadership Style", buildTemperamentText(A.decisionTop, A.decisionSummary), A.decisionTop)}
+    ${temperamentBlock(B.name, "Your Leadership Style", buildTemperamentText(B.decisionTop, B.decisionSummary), B.decisionTop)}
     ${promptsBlock([
       "<em>A Shared Decision:</em> Choose one decision you have this week. Combine your styles for the best outcome.",
       "<em>A Trust Check-in:</em> Ask, “When do you feel most respected in our decision-making?”"
@@ -725,7 +789,7 @@ function compassionColumn(p){
     const acc = temperamentAccentFromAffKey(k);
     return `
       <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-        ${affText(k)}
+        <strong>Expressed:</strong> ${affEXP[k]}
       </div>
     `;
   }).join("");
@@ -733,7 +797,7 @@ function compassionColumn(p){
     const acc = temperamentAccentFromAffKey(k);
     return `
       <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-        ${affText(k)}
+        <strong>Most Loved:</strong> ${affDES[k]}
       </div>
     `;
   }).join("");
@@ -750,11 +814,17 @@ function compassionColumn(p){
   `;
 }
 
+function buildTemperamentText(topKey, summary){
+  if(!topKey) return summary;
+  const d = temperamentDetails[topKey] || {};
+  return `${summary} <br><em>What it looks like:</em> ${d.looks || ""} <br><em>Watch-outs:</em> ${d.watch || ""} <br><em>Helpful tip:</em> ${d.tip || ""}`;
+}
+
 function temperamentBlock(name, title, text, topKey){
   const acc = temperamentAccentFromKey(topKey);
   return `
     <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-      <strong>${name} — ${title}:</strong> ${text}
+      <strong>${name} — ${title}:</strong> <span>${text}</span>
     </div>
   `;
 }
@@ -770,6 +840,7 @@ function rrCard(p){
     <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
       <strong>${p.name} — Respect &amp; Recognition:</strong> ${p.rrLabel} (${p.rrScore}/6)
       <p style="margin:8px 0 0;">${rrStatement(p.rrScore)}</p>
+      <p style="margin:4px 0 0;"><em>${rrExtra(p.rrLabel)}</em></p>
     </div>
   `;
 }
@@ -797,6 +868,7 @@ function patternColumn(p){
         <p><strong>Strengths:</strong> ${info.desc}</p>
         <p><strong>Challenges:</strong> ${info.challenges}</p>
         <p><strong>Typical in Tension:</strong> ${info.conflictStyle}</p>
+        <p style="margin:6px 0 0;"><em>What helps:</em> ${patternExtras[p.bondingKey]}</p>
       </div>
     </div></div>
   `;
