@@ -19,6 +19,10 @@
   .muted a:link, .muted a:visited { color:#9aa3ab; text-decoration:none; }
   .muted a:hover { color:#9aa3ab; text-decoration:underline; }
 
+  /* Utility tweaks */
+  .lh-13 { line-height: 1.3; }
+  .mt-24pt { margin-top: 24pt !important; }
+
   /* Ranking UI */
   .rank-wrap { max-width: 760px; margin: 10px auto; }
   .rank-help { text-align:center; margin:8px 0 14px; }
@@ -83,10 +87,13 @@
     <p style="text-align:center;"><em>Ready for a few “aha!” moments together?</em></p>
     <p>This is a moment for the two of you to connect. You’ll each take a few minutes to share your perspective on what builds intimacy and how you navigate daily life as a couple.</p>
     <p>When you're both done, you'll see your combined results with fun insights and practical ideas to support each other even better.</p>
+
     <p><strong>How it works:</strong></p>
-    <p>Pick someone to go first. When they're finished, hand the device over to your partner. Easy!</p>
+    <div class="lh-13">
+      <p>Pick someone to go first. When they're finished, hand the device over to your partner. Easy!</p>
+    </div>
   </div>
-  <div class="row" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+  <div class="row mt-24pt" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
     <input id="partnerAName" class="input" placeholder="Partner A name" aria-label="Partner A name" style="border:1px solid #4D9DE0; border-radius:8px; padding:10px 12px; min-width:220px;">
     <input id="partnerBName" class="input" placeholder="Partner B name" aria-label="Partner B name" style="border:1px solid #4D9DE0; border-radius:8px; padding:10px 12px; min-width:220px;">
   </div>
@@ -112,8 +119,8 @@
   <h2 id="resultsHeader">Your Marriage Connection Profile</h2>
   <div id="resultsIntro" class="intro-text">
     <h3 style="text-align:center;margin-top:0;">Your Marriage Connection Profile: The Journey Begins</h3>
-    <p>Welcome to your personalized guide to understanding each other in a new way. This profile is built on the Covenant Intimacy Fulfillment Model™ (CIFM). It’s a living map—helping you name what’s true today and aim for what’s possible tomorrow.</p>
-    <p>First you’ll see your ranked intimacy types (with definitions). Then we’ll highlight your relational dynamics, connection patterns, and personalized conflict strategies.</p>
+    <p>Welcome to the Marriage Connection Assessment, a guided experience designed to help you and your spouse build a covenant, joy-filled marriage as God designed.</p>
+    <p>This is your personalized guide to understanding each other in a new way. Think of this not as a set of labels, but as a living map to the unique landscape of your relationship—it helps you name what’s true today and aim for what’s possible tomorrow.</p>
   </div>
   <div id="results"></div>
   <p class="muted"><a href="https://happymarriagehappylife.com" target="_blank" rel="noopener">HappyMarriageHappyLife.com</a></p>
@@ -537,6 +544,8 @@ function finalizePartner(){
     renderResults();
   }
 }
+
+/* ---------- Results Renderer ---------- */
 function renderResults(){
   document.getElementById('quizPage').classList.add('hidden');
   document.getElementById('resultPage').classList.remove('hidden');
@@ -547,15 +556,14 @@ function renderResults(){
   const container = document.createElement('div');
   container.id = "couplesReport";
 
-  /* ================== SECTION 1 (UPDATED) ================== */
+  /* ================== SECTION 1 (UPDATED INTRO/COPY) ================== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
     <div class="intro-text">
-      This section reveals your unique connection profile, showing how you naturally express and receive intimacy. Think of your results as a guide to your relationship's most vibrant and rewarding pathways.
+      This section is all about understanding intimacy—the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It reveals your unique connection profile, showing how you naturally express love and how you feel most loved in return.
+      <p>Our model organizes intimacy into 12 distinct types that span all dimensions of human experience, wisely combining the essential aspects of 'being together' (like emotional bonding and spiritual connection) and 'doing together' (like shared effort and practical unity). This approach reflects how love truly thrives in real-life marriage. These types represent crucial points of connection (and sometimes conflict) in your relationship, and understanding your preferences gives you and your spouse a shared language to express your needs and navigate your connection. Think of your results as a vibrant guide to your relationship's most rewarding pathways.</p>
     </div>
-
-    <!-- (Removed: Ranked Lists with Definitions) -->
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Core Connection Strengths</h4>
@@ -600,18 +608,18 @@ function renderResults(){
     ])}
   `;
 
-  /* ================== SECTION 2 (unchanged from your current build) ================== */
+  /* ================== SECTION 2 (UPDATED INTROS) ================== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
     <div class="intro-text">
-      These everyday rhythms show how you care for each other, engage socially, share influence, and honor one another. Use the prompts to turn insights into action.
+      Your relationship isn't just a connection of two people; it's a unique dance of two beautiful, distinct individuals! This section is designed to help you understand the everyday rhythms that shape your connection. We'll explore how you naturally care for each other, how you engage socially, how you share influence and make decisions, and how you honor one another. Our hope is that these insights will not only bring clarity but also provide a powerful guide for your discussions, helping you protect your closeness and deepen your bond in every interaction.
     </div>
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Compassion & Care</h4>
     <div class="verse">${scripture.compassionCare}</div>
-    <p class="intro-text">How love is given and received. These are your top ways of expressing care and feeling cared for.</p>
+    <p class="intro-text">This dynamic delves into the heart of your relationship: how love, empathy, and emotional needs are expressed and received. It reveals your unique capacity for tenderness, emotional availability, nurturing, and presence. At its core, this is where you answer the profound question, "Do you care about me?"—both in how you show up for your spouse and how you long to receive comfort and support in return. Understanding this area helps you both ensure your hearts feel truly seen and safe.</p>
     <div class="couple-grid">
       ${compassionColumn(A)}
       ${compassionColumn(B)}
@@ -624,7 +632,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Social Preferences</h4>
     <div class="verse">${scripture.socialEngagement}</div>
-    <p class="intro-text">How you recharge and engage around people—so you can balance connection and personal space.</p>
+    <p class="intro-text">This dynamic is all about how you both recharge and engage with the world around you. It explores whether you feel energized by being with others (extraversion), find deep renewal in solitude (introversion), or perhaps thrive with a mix of both (ambiversion). Understanding these unique preferences is key to helping you and your spouse beautifully balance your needs for connection and personal space, ensuring you both feel filled up and ready to encourage each other daily.</p>
     ${temperamentBlock(A.name, "Your Social Energy", A.socialSummary, A.socialTop)}
     ${temperamentBlock(B.name, "Your Social Energy", B.socialSummary, B.socialTop)}
     ${promptsBlock([
@@ -635,7 +643,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Power & Control</h4>
     <div class="verse">${scripture.decisionLeadership}</div>
-    <p class="intro-text">How you navigate decisions and leadership—so collaboration feels respectful and safe.</p>
+    <p class="intro-text">This dynamic explores how you navigate decisions and leadership within your relationship, and how you approach influence and authority. It's all about how decisions are made, roles are shared, and influence is balanced. Understanding this helps you create a structure where shared responsibility and collaboration feel both respectful and safe. At its heart, this dynamic helps you wisely answer the question: "Who gets to decide?"—ensuring balance and mutual honor in your daily interactions.</p>
     ${temperamentBlock(A.name, "Your Leadership Style", A.decisionSummary, A.decisionTop)}
     ${temperamentBlock(B.name, "Your Leadership Style", B.decisionSummary, B.decisionTop)}
     ${promptsBlock([
@@ -646,7 +654,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Respect & Recognition</h4>
     <div class="verse">${scripture.respectRecognition}</div>
-    <p class="intro-text">How each partner is valued, affirmed, and honored for who they are.</p>
+    <p class="intro-text">This dynamic shines a light on how you both value, affirm, and truly see each other for who you are. It explores how you seek to be known, understood, and deeply appreciated, and in turn, how you honor your spouse's unique identity and contributions. At its heart, this is where you answer the profound question: "Do you value me?"—ensuring dignity, affirmation, and genuine respect flourish in your relationship.</p>
     ${rrCard(A)}
     ${rrCard(B)}
     ${promptsBlock([
@@ -655,7 +663,7 @@ function renderResults(){
     ])}
   `;
 
-  /* ================== SECTION 3 (unchanged from your current build) ================== */
+  /* ================== SECTION 3 (unchanged body) ================== */
   const aToB = conflictStrategies[A.bondingKey][B.bondingKey];
   const bToA = conflictStrategies[B.bondingKey][A.bondingKey];
 
@@ -680,7 +688,8 @@ function renderResults(){
       <h3 class="section-title" style="margin-top:0;">Thank You</h3>
       <div class="verse">${scripture.thankYou}</div>
       <p class="intro-text">We hope you had fun diving deep and discovering your unique connection types on multiple levels!</p>
-      <p class="intro-text">Remember, this has been a friendly, beginner's assessment, designed not to label you, but to inspire the sparks of connection and help your marriage explore the beautiful, unique individuals within it. Use these insights as a fun tool for introspection and spouse discovery, opening up new conversations and drawing you closer.</p>
+      <p class="intro-text">Remember, this has been a friendly, beginner's assessment,
+      designed not to label you, but to inspire the sparks of connection and help your marriage explore the beautiful, unique individuals within it. Use these insights as a fun tool for introspection and spouse discovery, opening up new conversations and drawing you closer.</p>
       <p class="intro-text">For to be truly known is to unlock the deepest intimacy, empowering you to courageously embrace what's true in your relationship today and boldly aim for what's possible tomorrow—cultivating the lasting love and joy-filled fulfillment God designed for your marriage.</p>
     </div>
   `;
@@ -689,20 +698,7 @@ function renderResults(){
   document.getElementById('results').appendChild(container);
 }
 
-/* ---------- results helpers ---------- */
-function rankedColumn(p){
-  return `
-    <div class="partner-card"><div class="partner-inner">
-      <div class="partner-header">${p.name}</div>
-      ${p.ranking.map((k,i)=>`
-        <div class="result-block" style="border-left-color:${typeColors[k]}; background:${typeOpac[k]};">
-          <strong>${i+1}. ${INTIMACY[k].label}</strong>
-          <div style="margin-top:6px;">${INTIMACY[k].desc}</div>
-        </div>
-      `).join("")}
-    </div></div>
-  `;
-}
+/* ---------- results helpers (NO rankedColumn) ---------- */
 function typesColumn(name, types){
   return `
     <div class="partner-card"><div class="partner-inner">
@@ -715,6 +711,7 @@ function typesColumn(name, types){
     </div></div>
   `;
 }
+
 function compassionColumn(p){
   const expressedBlocks = p.expressedTop2.map(k=>{
     const acc = temperamentAccentFromAffKey(k);
@@ -744,6 +741,7 @@ function compassionColumn(p){
     </div></div>
   `;
 }
+
 function temperamentBlock(name, title, text, topKey){
   const acc = temperamentAccentFromKey(topKey);
   return `
@@ -752,6 +750,7 @@ function temperamentBlock(name, title, text, topKey){
     </div>
   `;
 }
+
 function rrAccent(label){
   if(label==="Strong")   return { color:typeColors.Partnership, bg:typeOpac.Partnership };  // green
   if(label==="Moderate") return { color:typeColors.Commitment,  bg:typeOpac.Commitment  }; // yellow
@@ -766,14 +765,21 @@ function rrCard(p){
     </div>
   `;
 }
+
 function patternColumn(p){
-  const info = bondingInsights[p.bondingKey];
   const accMap = {
     SteadyConnector:{ color: typeColors.Partnership,  bg: typeOpac.Partnership  },
     ReassuranceSeeker:{ color: typeColors.Emotional, bg: typeOpac.Emotional },
     IndependentConnector:{ color: typeColors.Intellectual, bg: typeOpac.Intellectual },
     GuardedConnector:{ color: typeColors.Conflict,   bg: typeOpac.Conflict   }
   };
+  const info = {
+    SteadyConnector:{label:"Steady Connector", desc:"You create a safe space for open communication.",challenges:"You may assume quick talks fix everything.",conflictStyle:"Seeks harmony; may avoid depth."},
+    ReassuranceSeeker:{label:"Reassurance Seeker", desc:"You thrive on frequent affirmations.",challenges:"Validation needs may overwhelm others.",conflictStyle:"May over-pursue reassurance."},
+    IndependentConnector:{label:"Independent Connector", desc:"Calm, steady presence; values space.",challenges:"Space can feel like distance.",conflictStyle:"May withdraw or shut down."},
+    GuardedConnector:{label:"Guarded Connector", desc:"Builds trust gradually; dependable.",challenges:"Caution can slow openness.",conflictStyle:"May assume negative intent."}
+  }[p.bondingKey];
+
   const acc = accMap[p.bondingKey] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
   return `
     <div class="partner-card"><div class="partner-inner">
@@ -787,6 +793,7 @@ function patternColumn(p){
     </div></div>
   `;
 }
+
 function strategyCard(name, bondingKey, text){
   const acc = {
     SteadyConnector:{ color: typeColors.Partnership,  bg: typeOpac.Partnership  },
@@ -794,7 +801,12 @@ function strategyCard(name, bondingKey, text){
     IndependentConnector:{ color: typeColors.Intellectual, bg: typeOpac.Intellectual },
     GuardedConnector:{ color: typeColors.Conflict,   bg: typeOpac.Conflict   }
   }[bondingKey] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
-  const label = bondingInsights[bondingKey].label;
+  const label = {
+    SteadyConnector:"Steady Connector",
+    ReassuranceSeeker:"Reassurance Seeker",
+    IndependentConnector:"Independent Connector",
+    GuardedConnector:"Guarded Connector"
+  }[bondingKey] || "Connection Pattern";
   return `
     <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
       <strong>${name} — ${label}</strong>
@@ -802,14 +814,23 @@ function strategyCard(name, bondingKey, text){
     </div>
   `;
 }
+
 function affText(k){
-  return {Playful:"Playful moments & encouragement", Initiative:"Taking initiative / removing stress", DeepTalk:"Deep conversation & focused time", Warmth:"Warm presence & gentle touch", Support:"Practical support & teamwork"}[k]||k;
+  return {
+    Playful:"Playful moments & encouragement",
+    Initiative:"Taking initiative / removing stress",
+    DeepTalk:"Deep conversation & focused time",
+    Warmth:"Warm presence & gentle touch",
+    Support:"Practical support & teamwork"
+  }[k]||k;
 }
+
 function rrStatement(score){
   if(score>=5) return "You generally feel affirmed, appreciated, respected, and validated—and you likely offer the same in return.";
   if(score>=3) return "You often feel appreciated and respected, though there may be moments when clearer affirmation would be meaningful.";
   return "You may not consistently feel affirmed or validated; be explicit about the kinds of appreciation that help you feel respected.";
 }
+
 /* Gray prompts */
 function promptsBlock(items){
   return `
