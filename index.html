@@ -62,10 +62,10 @@
   .results-list{ list-style-position:outside; margin-left:20px; text-align:left; }
   .results-list li{ margin-bottom:6px; }
 
-  /* Gray prompts highlight */
+  /* Discussion Prompts highlight = light blue */
   .prompt-block {
-    border-left:8px solid #A3A3A3;
-    background:#F1F3F5; /* light gray */
+    border-left:8px solid #4D9DE0;
+    background: rgba(77,157,224,0.08);
     border-radius:8px; padding:16px; margin:16px 0;
   }
 
@@ -88,9 +88,9 @@
     <p>This is a moment for the two of you to connect. You’ll each take a few minutes to share your perspective on what builds intimacy and how you navigate daily life as a couple.</p>
     <p>When you're both done, you'll see your combined results with fun insights and practical ideas to support each other even better.</p>
 
-    <p><strong>How it works:</strong></p>
-    <div class="lh-13">
-      <p>Pick someone to go first. When they're finished, hand the device over to your partner. Easy!</p>
+    <p style="margin-bottom:0.2em;"><strong>How it works:</strong></p>
+    <div class="lh-13" style="margin-top:0;">
+      <p style="margin:0;">Pick someone to go first. When they're finished, hand the device over to your partner. Easy!</p>
     </div>
   </div>
   <div class="row mt-24pt" style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
@@ -118,7 +118,7 @@
   <img src="https://static.wixstatic.com/media/4d6372_c110ccf05896482192f466d6c0e3c1ae~mv2.png" alt="Logo" style="display:block; margin:0 auto 12px; max-width:200px;" onerror="this.src='https://via.placeholder.com/200x80?text=Logo'">
   <h2 id="resultsHeader">Your Marriage Connection Profile</h2>
   <div id="resultsIntro" class="intro-text">
-    <h3 style="text-align:center;margin-top:0;">Your Marriage Connection Profile: The Journey Begins</h3>
+    <!-- Subheading removed per request -->
     <p>Welcome to the Marriage Connection Assessment, a guided experience designed to help you and your spouse build a covenant, joy-filled marriage as God designed.</p>
     <p>This is your personalized guide to understanding each other in a new way. Think of this not as a set of labels, but as a living map to the unique landscape of your relationship—it helps you name what’s true today and aim for what’s possible tomorrow.</p>
   </div>
@@ -531,7 +531,7 @@ function finalizePartner(){
     // Handoff card (only between A and B)
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
-    document.getElementById('resultsHeader').textContent = "Partner Handoff";
+    document.getElementById('resultsHeader').textContent = "Your Marriage Connection Profile";
     document.getElementById('results').innerHTML = `
       <div class="result-block" style="text-align:center;">
         <h3 class="section-title" style="margin-top:0;">Thank you, ${name}!</h3>
@@ -549,14 +549,14 @@ function finalizePartner(){
 function renderResults(){
   document.getElementById('quizPage').classList.add('hidden');
   document.getElementById('resultPage').classList.remove('hidden');
-  document.getElementById('resultsHeader').textContent = "Couples Comparison Profiles";
+  document.getElementById('resultsHeader').textContent = "Your Marriage Connection Profile";
 
   const A = profiles[0], B = profiles[1];
 
   const container = document.createElement('div');
   container.id = "couplesReport";
 
-  /* ================== SECTION 1 (UPDATED INTRO/COPY) ================== */
+  /* ================== SECTION 1 ================== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
@@ -608,7 +608,7 @@ function renderResults(){
     ])}
   `;
 
-  /* ================== SECTION 2 (UPDATED INTROS) ================== */
+  /* ================== SECTION 2 ================== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
@@ -663,7 +663,7 @@ function renderResults(){
     ])}
   `;
 
-  /* ================== SECTION 3 (unchanged body) ================== */
+  /* ================== SECTION 3 ================== */
   const aToB = conflictStrategies[A.bondingKey][B.bondingKey];
   const bToA = conflictStrategies[B.bondingKey][A.bondingKey];
 
@@ -684,12 +684,11 @@ function renderResults(){
     ${strategyCard(B.name, B.bondingKey, bToA)}
 
     <div class="section-divider"></div>
-    <div class="result-block" style="border-left-color:#4D9DE0; background:rgba(77,157,224,.08);">
-      <h3 class="section-title" style="margin-top:0;">Thank You</h3>
+    <div class="result-block" style="border-left-color:transparent; background:#fff;">
+      <h3 style="margin-top:0; font-family:'Merriweather', serif; color:#4D9DE0;">Thank You</h3>
       <div class="verse">${scripture.thankYou}</div>
       <p class="intro-text">We hope you had fun diving deep and discovering your unique connection types on multiple levels!</p>
-      <p class="intro-text">Remember, this has been a friendly, beginner's assessment,
-      designed not to label you, but to inspire the sparks of connection and help your marriage explore the beautiful, unique individuals within it. Use these insights as a fun tool for introspection and spouse discovery, opening up new conversations and drawing you closer.</p>
+      <p class="intro-text">Remember, this has been a friendly, beginner's assessment, designed not to label you, but to inspire the sparks of connection and help your marriage explore the beautiful, unique individuals within it. Use these insights as a fun tool for introspection and spouse discovery, opening up new conversations and drawing you closer.</p>
       <p class="intro-text">For to be truly known is to unlock the deepest intimacy, empowering you to courageously embrace what's true in your relationship today and boldly aim for what's possible tomorrow—cultivating the lasting love and joy-filled fulfillment God designed for your marriage.</p>
     </div>
   `;
@@ -831,7 +830,7 @@ function rrStatement(score){
   return "You may not consistently feel affirmed or validated; be explicit about the kinds of appreciation that help you feel respected.";
 }
 
-/* Gray prompts */
+/* Discussion Prompts block */
 function promptsBlock(items){
   return `
     <div class="prompt-block">
