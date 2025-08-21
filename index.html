@@ -181,24 +181,23 @@ const scripture = {
   thankYou: "“May the Lord make your love increase and overflow for each other and for everyone else, just as ours does for you.” — 1 Thessalonians 3:12"
 };
 
-/* Temperament accent mapping (Sanguine/Choleric/Melancholy/Phlegmatic/Supine palette) */
+/* Temperament accent mapping (Sanguine/Choleric/Melancholy/Phlegmatic/Supine) */
 function temperamentAccentFromKey(k){
   const map = {
-    E: { color: typeColors.Emotional,    bg: typeOpac.Emotional    }, // Sanguine (redish)
-    S: { color: typeColors.Commitment,   bg: typeOpac.Commitment   }, // Choleric (yellowish)
-    R: { color: typeColors.Intellectual, bg: typeOpac.Intellectual }, // Melancholy (bluish/purple)
-    A: { color: typeColors.Affable,      bg: typeOpac.Affable      }, // Phlegmatic (pink)
-    U: { color: typeColors.Partnership,  bg: typeOpac.Partnership  }  // Supine (green)
+    E: { color: typeColors.Emotional,    bg: typeOpac.Emotional    }, // Sanguine
+    S: { color: typeColors.Commitment,   bg: typeOpac.Commitment   }, // Choleric
+    R: { color: typeColors.Intellectual, bg: typeOpac.Intellectual }, // Melancholy
+    A: { color: typeColors.Affable,      bg: typeOpac.Affable      }, // Phlegmatic
+    U: { color: typeColors.Partnership,  bg: typeOpac.Partnership  }  // Supine
   };
   return map[k] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
 }
 function temperamentAccentFromAffKey(k){
-  // Playful→E, Initiative→S, DeepTalk→R, Warmth→A, Support→U
   const t = { Playful:"E", Initiative:"S", DeepTalk:"R", Warmth:"A", Support:"U" }[k];
   return temperamentAccentFromKey(t);
 }
 
-/* Rich copy for Compassion & Care (expressed/desired) */
+/* Rich copy for Compassion & Care */
 const affEXP = {
   Playful: "You naturally lift the mood with humor, lightness, and spontaneous moments that say, “I’m with you.” You turn ordinary spaces into warm, safe places.",
   Initiative: "You show love by stepping in and taking pressure off—solving problems, removing obstacles, and protecting what matters to your spouse.",
@@ -233,7 +232,7 @@ const temperamentDetails = {
        tip:"Voice one specific need and one boundary you appreciate." }
 };
 
-/* Conversational details for Section 3: Connection Patterns */
+/* Conversational details for Section 3 */
 const patternDetail = {
   SteadyConnector: {
     connectionType: "Harmony-focused and steady—your presence calms the room and keeps connection safe.",
@@ -265,7 +264,7 @@ const patternDetail = {
   }
 };
 
-/* Personalized sentence (FromName → ToName) based on the receiver’s pattern */
+/* Personalized sentence (FromName → ToName) based on receiver’s pattern */
 function nameStrategy(fromName, toName, bondingKey){
   const base = {
     SteadyConnector: `${fromName}, try approaching ${toName} by keeping the tone gentle but staying with one feeling and one specific need before you move to solutions.`,
@@ -276,7 +275,7 @@ function nameStrategy(fromName, toName, bondingKey){
   return base[bondingKey];
 }
 
-/* Connection pattern extras (concise repair tips) */
+/* Concise repair tips */
 const patternExtras = {
   SteadyConnector: "Use a short daily “check-in” ritual so small tensions resolve early.",
   ReassuranceSeeker: "Ask for a specific reassurance, then pause to prevent spirals.",
@@ -289,8 +288,9 @@ let partnerAName="", partnerBName="";
 let partnerIndex = 0; // 0 = A, 1 = B
 const TOTAL_STEPS = 13;
 let step = 0;
+let resultsShown = false;  /* guard: results render once */
 
-// per-partner answers
+/* per-partner answers */
 let answers = {
   rank: [...TYPES],
   expressedTop2: [],
@@ -320,7 +320,7 @@ function hideAllPages(){
 function startPartner(idx){
   partnerIndex = idx;
   resetAnswers();
-  hideAllPages();                        /* ensures handoff/result is hidden */
+  hideAllPages();
   document.getElementById('quizPage').classList.remove('hidden');
   document.getElementById('quizTitle').textContent = `Assessment — ${idx===0?partnerAName:partnerBName}`;
   step = 0;
@@ -535,7 +535,6 @@ function next(){ step++; if(step<TOTAL_STEPS) renderStep(); else finalizePartner
 function finalizePartner(){
   const name = partnerIndex===0 ? partnerAName : partnerBName;
 
-  // Social/Decision tops + summaries
   const socialCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.social).forEach(k=> socialCounts[k]++);
   const decisionCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.decision).forEach(k=> decisionCounts[k]++);
   const socialTop = Object.entries(socialCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || null;
@@ -557,11 +556,9 @@ function finalizePartner(){
     U:"You steadily support plans and shared goals."
   })[decisionTop] : "You adapt flexibly to different situations.";
 
-  // R&R
   const rrScore = (answers.rr.rr1 ?? 0) + (answers.rr.rr2 ?? 0);
   const rrLabel = rrScore>=5 ? "Strong" : rrScore>=3 ? "Moderate" : "Needs Attention";
 
-  // Bonding
   const bondCounts = {SteadyConnector:0, ReassuranceSeeker:0, IndependentConnector:0, GuardedConnector:0};
   Object.values(answers.bond).forEach(k=> bondCounts[k]++);
   const bondingKey = Object.entries(bondCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || "SteadyConnector";
@@ -579,7 +576,6 @@ function finalizePartner(){
 
   if(partnerIndex===0){
     profiles[0] = profile;
-    // Handoff card (only between A and B)
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
     document.getElementById('resultsHeader').textContent = "Your Marriage Connection Profile";
@@ -592,7 +588,10 @@ function finalizePartner(){
     `;
   } else {
     profiles[1] = profile;
-    renderResults();
+    if (!resultsShown) {  /* GUARD: only render once */
+      resultsShown = true;
+      renderResults();
+    }
   }
 }
 
@@ -843,7 +842,7 @@ function strategyCard(fromName, toName, toPatternKey, practicalTip){
   `;
 }
 
-/* RR helpers */
+/* Respect & Recognition helpers */
 function rrAccent(label){
   if(label==="Strong")   return { color:typeColors.Partnership, bg:typeOpac.Partnership };
   if(label==="Moderate") return { color:typeColors.Commitment,  bg:typeOpac.Commitment  };
