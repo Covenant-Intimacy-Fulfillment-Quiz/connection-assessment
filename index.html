@@ -47,7 +47,7 @@
   .pill.selected{ background:#3A7FBF; border-color:#3A7FBF; color:#fff; }
 
   /* Results */
-  .result-block { margin-bottom:16px; page-break-inside:avoid; padding:16px; border-left:8px solid #4D9DE0; border-radius:8px; background:#fff; }
+  .result-block { margin-bottom:16px; page-break-inside:avoid; padding:16px; border-left:8px solid #4D9DE0; border-radius:8px; background:#fff; line-height:1.3; }
   .section-title { color:#1A3C5E; font-family:'Open Sans',sans-serif; font-weight:700; font-size:16pt; margin-bottom:10px; }
   .subsection-title { color:#1A3C5E; font-family:'Roboto',sans-serif; font-weight:600; font-size:14pt; margin: 15px 0 8px; text-align:center; }
   .section-divider{ height:1pt; background-color:#FF4D4D; width:100%; max-width:860px; margin:24pt auto; }
@@ -77,8 +77,8 @@
     margin-top:0;
     font-family:'Savoye LET','Zapfino','Great Vibes',cursive;
     color:#4D9DE0;
-    font-size:2.2rem;
-    line-height:1.2;
+    font-size:4.4rem;  /* doubled */
+    line-height:1.1;
     text-align:center;
   }
 
@@ -139,18 +139,18 @@
 <script>
 /* ================== Data ================== */
 const INTIMACY = {
-  Spiritual:{label:"Spiritual Intimacy", desc:"Anchors the relationship in God’s design and purpose. It governs how love is defined and lived out."},
-  Emotional:{label:"Emotional Intimacy", desc:"Enables vulnerability, empathy, and emotional safety. It opens the door to all other forms of closeness."},
-  Commitment:{label:"Commitment Intimacy", desc:"The covenant glue. It provides the security needed to face challenges and grow deeper in all other areas."},
-  Intellectual:{label:"Intellectual Intimacy", desc:"Connecting through thoughts, values, and deep conversations."},
-  Affable:{label:"Affable Intimacy", desc:"Agreeable, easy going, peaceful, social, and ease in your interactions."},
-  Conflict:{label:"Conflict Intimacy", desc:"Staying connected in disagreement."},
-  Recreational:{label:"Recreational Intimacy", desc:"Laughter, playfulness, enjoying life and shared experiences together."},
-  Partnership:{label:"Partnership Intimacy", desc:"Managing responsibilities and making decisions together."},
-  Stability:{label:"Financial Intimacy (Stability)", desc:"Transparent, honest, and value-aligned management of resources like time and money, fostering trust and stability."},
-  Creative:{label:"Creative Intimacy", desc:"Dreaming, building, or creating things together."},
-  Physical:{label:"Physical Intimacy", desc:"Touch, presence, comfort, and non-sexual affection."},
-  Sexual:{label:"Sexual Intimacy", desc:"Passionate, exclusive, and sacred physical union."}
+  Spiritual:{label:"Spiritual Intimacy", desc:"Spiritual intimacy is the shared sense of purpose and connection to God’s design that anchors a relationship. It’s the core that shapes how love is experienced and expressed, guiding your journey together."},
+  Emotional:{label:"Emotional Intimacy", desc:"Emotional intimacy is the key to deep connection, creating a safe space for vulnerability and empathy. This crucial bond is the gateway that allows all other forms of closeness to flourish."},
+  Commitment:{label:"Commitment Intimacy", desc:"Commitment intimacy is the security and dedication that acts as the core of a relationship, providing the stability needed to weather life’s storms. This dedicated bond is what allows a couple to face challenges and deepen their connection over time."},
+  Intellectual:{label:"Intellectual Intimacy", desc:"Intellectual intimacy is about sharing a mental and emotional connection through engaging conversations and mutual respect for each other’s thoughts and values. It builds a powerful bond forged by the exchange of ideas and the exploration of new perspectives."},
+  Affable:{label:"Affable Intimacy", desc:"Affable intimacy is the ease and comfort found in a relationship, creating a peaceful and enjoyable environment. It’s the simple joy of being agreeable and easygoing in your daily interactions with each other."},
+  Conflict:{label:"Conflict Intimacy", desc:"Conflict intimacy is the ability to maintain a strong connection and mutual respect even during disagreements. It allows couples to navigate differences and grow closer through the process of resolving conflicts together."},
+  Recreational:{label:"Recreational Intimacy", desc:"Recreational intimacy is about sharing laughter, playfulness, and joy through shared hobbies and experiences. It brings vitality and fun to a relationship, creating cherished memories that strengthen the bond."},
+  Partnership:{label:"Partnership Intimacy", desc:"Partnership intimacy is the collaborative connection built by working together to manage daily responsibilities and make decisions. This forges a powerful bond as a couple functions as a unified team, tackling life’s challenges side by side."},
+  Stability:{label:"Financial Intimacy (Stability)", desc:"Stability intimacy is about transparently and honestly managing resources like time and money together, building a foundation of trust and a secure future. It’s a shared commitment to aligning your values as you work toward a common goal."},
+  Creative:{label:"Creative Intimacy", desc:"Creative intimacy is the shared joy of bringing new ideas to life by building and dreaming together. This bond is strengthened through the process of collaborating on projects and seeing your shared vision become a reality."},
+  Physical:{label:"Physical Intimacy", desc:"Physical intimacy involves connecting through non-sexual touch, comfort, and physical presence. This kind of closeness creates a sense of safety and security, affirming your bond through simple gestures and shared moments."},
+  Sexual:{label:"Sexual Intimacy", desc:"Sexual intimacy is a passionate, exclusive, and sacred physical union that expresses a deep, committed connection. It’s a unique and powerful way to honor your bond through a shared experience of vulnerability and pleasure."}
 };
 const TYPES = Object.keys(INTIMACY);
 
@@ -638,14 +638,14 @@ function renderResults(){
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
     <div class="intro-text">
-      This section is all about understanding intimacy—the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It reveals your unique connection profile, showing how you naturally express love and how you feel most loved in return.
-      <p>Our model organizes intimacy into 12 distinct types that span all dimensions of human experience, wisely combining the essential aspects of 'being together' (like emotional bonding and spiritual connection) and 'doing together' (like shared effort and practical unity). This approach reflects how love truly thrives in real-life marriage. These types represent crucial points of connection (and sometimes conflict) in your relationship, and understanding your preferences gives you and your spouse a shared language to express your needs and navigate your connection. Think of your results as a vibrant guide to your relationship's most rewarding pathways.</p>
+      <strong>This section is all about understanding intimacy</strong>—the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It reveals your unique connection profile, showing how you naturally express love and how you feel most loved in return.
+      <p>Our model organizes intimacy into 12 distinct types that span all dimensions of human experience, wisely combining the essential aspects of <em>“being together”</em> (like emotional bonding and spiritual connection) and <em>“doing together”</em> (like shared effort and practical unity). This approach reflects how love truly thrives in real-life marriage. These types represent crucial points of connection (and sometimes conflict) in your relationship, and understanding your preferences gives you and your spouse a shared language to express your needs and navigate your connection. Think of your results as a <strong>vibrant guide</strong> to your relationship’s most rewarding pathways.</p>
     </div>
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Core Connection Strengths</h4>
     <div class="verse">${scripture.coreStrengths}</div>
-    <p class="intro-text">Based on your unique profile, these are your most fulfilling and effortless pathways to deeper closeness. They highlight your natural strengths and the incredible ways you both genuinely thrive.</p>
+    <p class="intro-text"><strong>Based on your unique profile</strong>, these are your most fulfilling and effortless pathways to deeper closeness. They highlight your natural strengths and the incredible ways you both genuinely thrive.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.coreTypes)}
       ${typesColumn(B.name, B.coreTypes)}
@@ -659,7 +659,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Areas for Growth</h4>
     <div class="verse">${scripture.areasForGrowth}</div>
-    <p class="intro-text">You'll find these areas are truly wonderful opportunities for intentional focus. With just a bit of practice and presence, you can absolutely deepen your connection in these types of intimacy.</p>
+    <p class="intro-text">You’ll find these areas are truly wonderful opportunities for intentional focus. With just a bit of practice and presence, you can absolutely deepen your connection in these types of intimacy.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.growthTypes)}
       ${typesColumn(B.name, B.growthTypes)}
@@ -673,7 +673,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Untapped Opportunities</h4>
     <div class="verse">${scripture.untappedOpps}</div>
-    <p class="intro-text">These aren't weaknesses at all! Think of them as exciting, untapped gifts for you to discover as a couple. Embracing these new avenues of connection will add surprising depth and vibrant excitement to your marriage.</p>
+    <p class="intro-text">These aren’t weaknesses at all—think of them as exciting, **untapped gifts** for you to discover as a couple. Embracing these new avenues of connection can add surprising depth and vibrant excitement to your marriage.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.untappedTypes)}
       ${typesColumn(B.name, B.untappedTypes)}
@@ -690,13 +690,13 @@ function renderResults(){
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
     <div class="intro-text">
-      Your relationship isn't just a connection of two people; it's a unique dance of two beautiful, distinct individuals! This section is designed to help you understand the everyday rhythms that shape your connection. We'll explore how you naturally care for each other, how you engage socially, how you share influence and make decisions, and how you honor one another. Our hope is that these insights will not only bring clarity but also provide a powerful guide for your discussions, helping you protect your closeness and deepen your bond in every interaction.
+      Your relationship isn’t just a connection of two people; it’s a <strong>unique dance</strong> of two beautiful, distinct individuals! This section is designed to help you understand the everyday rhythms that shape your connection.
     </div>
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Compassion & Care</h4>
     <div class="verse">${scripture.compassionCare}</div>
-    <p class="intro-text">This dynamic delves into the heart of your relationship: how love, empathy, and emotional needs are expressed and received. It reveals your unique capacity for tenderness, emotional availability, nurturing, and presence. At its core, this is where you answer the profound question, "Do you care about me?"—both in how you show up for your spouse and how you long to receive comfort and support in return. Understanding this area helps you both ensure your hearts feel truly seen and safe.</p>
+    <p class="intro-text">This dynamic delves into the heart of your relationship: how love, empathy, and emotional needs are expressed and received. It reveals your unique capacity for tenderness, emotional availability, nurturing, and presence. At its core, this is where you answer the profound question, <em>“Do you care about me?”</em>—both in how you show up for your spouse and how you long to receive comfort and support in return. Understanding this area helps you both ensure your hearts feel truly seen and safe.</p>
     <div class="couple-grid">
       ${compassionColumn(A)}
       ${compassionColumn(B)}
@@ -709,7 +709,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Social Preferences</h4>
     <div class="verse">${scripture.socialEngagement}</div>
-    <p class="intro-text">This dynamic is all about how you both recharge and engage with the world around you. It explores whether you feel energized by being with others (extraversion), find deep renewal in solitude (introversion), or perhaps thrive with a mix of both (ambiversion). Understanding these unique preferences is key to helping you and your spouse beautifully balance your needs for connection and personal space, ensuring you both feel filled up and ready to encourage each other daily.</p>
+    <p class="intro-text">This dynamic is all about how you both recharge and engage with the world around you. It explores whether you feel energized by being with others (extraversion), find deep renewal in solitude (introversion), or perhaps thrive with a mix of both (<em>ambiversion</em>). Understanding these unique preferences is key to helping you beautifully balance connection and personal space.</p>
     ${temperamentBlock(A.name, "Your Social Energy", buildTemperamentText(A.socialTop, A.socialSummary), A.socialTop)}
     ${temperamentBlock(B.name, "Your Social Energy", buildTemperamentText(B.socialTop, B.socialSummary), B.socialTop)}
     ${promptsBlock([
@@ -720,7 +720,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Power & Control</h4>
     <div class="verse">${scripture.decisionLeadership}</div>
-    <p class="intro-text">This dynamic explores how you navigate decisions and leadership within your relationship, and how you approach influence and authority. It's all about how decisions are made, roles are shared, and influence is balanced. Understanding this helps you create a structure where shared responsibility and collaboration feel both respectful and safe. At its heart, this dynamic helps you wisely answer the question: "Who gets to decide?"—ensuring balance and mutual honor in your daily interactions.</p>
+    <p class="intro-text">This dynamic explores how you navigate decisions and leadership within your relationship, and how you approach influence and authority. It’s about how decisions are made, roles are shared, and influence is balanced. Understanding this helps you create a structure where shared responsibility and collaboration feel both respectful and safe.</p>
     ${temperamentBlock(A.name, "Your Leadership Style", buildTemperamentText(A.decisionTop, A.decisionSummary), A.decisionTop)}
     ${temperamentBlock(B.name, "Your Leadership Style", buildTemperamentText(B.decisionTop, B.decisionSummary), B.decisionTop)}
     ${promptsBlock([
@@ -731,7 +731,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Respect & Recognition</h4>
     <div class="verse">${scripture.respectRecognition}</div>
-    <p class="intro-text">This dynamic shines a light on how you both value, affirm, and truly see each other for who you are. It explores how you seek to be known, understood, and deeply appreciated, and in turn, how you honor your spouse's unique identity and contributions. At its heart, this is where you answer the profound question: "Do you value me?"—ensuring dignity, affirmation, and genuine respect flourish in your relationship.</p>
+    <p class="intro-text">This dynamic shines a light on how you both value, affirm, and truly see each other for who you are. It explores how you seek to be known, understood, and deeply appreciated, and in turn, how you honor your spouse’s unique identity and contributions. At its heart, this is where you answer the profound question: <em>“Do you value me?”</em></p>
     ${rrCard(A)}
     ${rrCard(B)}
     ${promptsBlock([
@@ -765,8 +765,8 @@ function renderResults(){
       <h3 class="thank-title">Thank You</h3>
       <div class="verse">${scripture.thankYou}</div>
       <p class="intro-text">We hope you had fun diving deep and discovering your unique connection types on multiple levels!</p>
-      <p class="intro-text">Remember, this has been a friendly, beginner's assessment, designed not to label you, but to inspire the sparks of connection and help your marriage explore the beautiful, unique individuals within it. Use these insights as a fun tool for introspection and spouse discovery, opening up new conversations and drawing you closer.</p>
-      <p class="intro-text">For to be truly known is to unlock the deepest intimacy, empowering you to courageously embrace what's true in your relationship today and boldly aim for what's possible tomorrow—cultivating the lasting love and joy-filled fulfillment God designed for your marriage.</p>
+      <p class="intro-text">Remember, this has been a friendly, beginner’s assessment, designed not to label you, but to inspire the sparks of connection and help your marriage explore the beautiful, unique individuals within it. Use these insights as a fun tool for introspection and spouse discovery, opening up new conversations and drawing you closer.</p>
+      <p class="intro-text">To be truly known is to unlock the deepest intimacy—embracing what’s true today and boldly aiming for what’s possible tomorrow, cultivating the lasting love and joy-filled fulfillment God designed for your marriage.</p>
     </div>
   `;
 
