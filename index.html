@@ -46,7 +46,7 @@
   .pill { display:inline-block; padding:8px 12px; border-radius:999px; border:1px solid #d0d7de; margin:6px; cursor:pointer; }
   .pill.selected{ background:#3A7FBF; border-color:#3A7FBF; color:#fff; }
 
-  /* Results */
+  /* Results (highlighted cards) */
   .result-block { margin-bottom:16px; page-break-inside:avoid; padding:16px; border-left:8px solid #4D9DE0; border-radius:8px; background:#fff; line-height:1.3; }
   .section-title { color:#1A3C5E; font-family:'Open Sans',sans-serif; font-weight:700; font-size:16pt; margin-bottom:10px; }
   .subsection-title { color:#1A3C5E; font-family:'Roboto',sans-serif; font-weight:600; font-size:14pt; margin: 15px 0 8px; text-align:center; }
@@ -72,19 +72,23 @@
 
   .partner-subhead{ text-align:center; margin:6px 0 6px; }
 
-  /* Elegant Thank You title; try system scripts, fall back to Great Vibes */
+  /* “Thank You” title — larger, centered, reduced spacing; scales on mobile */
   .thank-title{
     margin-top:0;
+    margin-bottom:12pt;       /* requested smaller space below */
     font-family:'Savoye LET','Zapfino','Great Vibes',cursive;
     color:#4D9DE0;
-    font-size:4.4rem;  /* doubled */
+    font-size:4.4rem;         /* desktop size (twice as big) */
     line-height:1.1;
     text-align:center;
   }
-
   @media (max-width:700px){
     .couple-grid{ grid-template-columns:1fr; }
     .couple-grid::before{ display:none; }
+    .thank-title{ font-size:3.2rem; }   /* scale down on tablets/phones */
+  }
+  @media (max-width:420px){
+    .thank-title{ font-size:2.6rem; }   /* further reduce for small phones */
   }
 </style>
 </head>
@@ -638,14 +642,14 @@ function renderResults(){
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
     <div class="intro-text">
-      <strong>This section is all about understanding intimacy</strong>—the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It reveals your unique connection profile, showing how you naturally express love and how you feel most loved in return.
-      <p>Our model organizes intimacy into 12 distinct types that span all dimensions of human experience, wisely combining the essential aspects of <em>“being together”</em> (like emotional bonding and spiritual connection) and <em>“doing together”</em> (like shared effort and practical unity). This approach reflects how love truly thrives in real-life marriage. These types represent crucial points of connection (and sometimes conflict) in your relationship, and understanding your preferences gives you and your spouse a shared language to express your needs and navigate your connection. Think of your results as a <strong>vibrant guide</strong> to your relationship’s most rewarding pathways.</p>
+      This section is all about understanding intimacy—the profound experience of being truly known, deeply connected, and fully cherished by your spouse. It reveals your unique connection profile, showing how you naturally express love and how you feel most loved in return.
+      <p>Our model organizes intimacy into 12 distinct types that span all dimensions of human experience, wisely combining the essential aspects of <em>“being together”</em> (like emotional bonding and spiritual connection) and <em>“doing together”</em> (like shared effort and practical unity). This approach reflects how love truly thrives in real-life marriage. These types represent crucial points of connection (and sometimes conflict) in your relationship, and understanding your preferences gives you and your spouse a shared language to express your needs and navigate your connection. Think of your results as a vibrant guide to your relationship’s most rewarding pathways.</p>
     </div>
 
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Core Connection Strengths</h4>
     <div class="verse">${scripture.coreStrengths}</div>
-    <p class="intro-text"><strong>Based on your unique profile</strong>, these are your most fulfilling and effortless pathways to deeper closeness. They highlight your natural strengths and the incredible ways you both genuinely thrive.</p>
+    <p class="intro-text">Based on your unique profile, these are your most fulfilling and effortless pathways to deeper closeness. They highlight your natural strengths and the incredible ways you both genuinely thrive.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.coreTypes)}
       ${typesColumn(B.name, B.coreTypes)}
@@ -673,7 +677,7 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Your Untapped Opportunities</h4>
     <div class="verse">${scripture.untappedOpps}</div>
-    <p class="intro-text">These aren’t weaknesses at all—think of them as exciting, **untapped gifts** for you to discover as a couple. Embracing these new avenues of connection can add surprising depth and vibrant excitement to your marriage.</p>
+    <p class="intro-text">These aren’t weaknesses at all—think of them as exciting, untapped gifts for you to discover as a couple. Embracing these new avenues of connection can add surprising depth and vibrant excitement to your marriage.</p>
     <div class="couple-grid">
       ${typesColumn(A.name, A.untappedTypes)}
       ${typesColumn(B.name, B.untappedTypes)}
@@ -690,7 +694,7 @@ function renderResults(){
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
     <div class="intro-text">
-      Your relationship isn’t just a connection of two people; it’s a <strong>unique dance</strong> of two beautiful, distinct individuals! This section is designed to help you understand the everyday rhythms that shape your connection.
+      Your relationship isn’t just a connection of two people; it’s a unique dance of two beautiful, distinct individuals! This section is designed to help you understand the everyday rhythms that shape your connection.
     </div>
 
     <div class="subsection-divider"></div>
