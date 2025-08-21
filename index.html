@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Marriage Connection Assessment — Couples (Ranked)</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Open+Sans:wght@600;700&family=Merriweather:ital,wght@1,400;1,700&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Open+Sans:wght@600;700&family=Merriweather:ital,wght@1,400;1,700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
   body { font-family: Arial, sans-serif; background:#FFF9F2; color:#1A3C5E; max-width: 980px; margin:auto; padding:20px; box-sizing:border-box; }
   h1,h2,h3,h4{ text-align:center; line-height:1.25; }
@@ -71,12 +71,12 @@
 
   .partner-subhead{ text-align:center; margin:6px 0 6px; }
 
-  /* Friendly Thank You title centered in Pacifico */
+  /* Elegant Thank You title centered; try system scripts, fall back to Great Vibes */
   .thank-title{
     margin-top:0;
-    font-family:'Pacifico', cursive;
+    font-family:'Savoye LET','Zapfino','Great Vibes',cursive;
     color:#4D9DE0;
-    font-size:2.2rem; /* larger, warm & friendly */
+    font-size:2.2rem;
     line-height:1.2;
     text-align:center;
   }
@@ -166,7 +166,6 @@ const typeOpac = {
   Conflict:"rgba(255,165,82,.08)", Physical:"rgba(255,140,105,.08)", Sexual:"rgba(230,57,70,.08)"
 };
 
-/* Scripture catalogue */
 const scripture = {
   coreStrengths: "“Above all, love each other deeply, because love covers over a multitude of sins.” — 1 Peter 4:8",
   areasForGrowth: "“Let us consider how we may spur one another on toward love and good deeds.” — Hebrews 10:24",
@@ -181,19 +180,18 @@ const scripture = {
   thankYou: "“May the Lord make your love increase and overflow for each other and for everyone else, just as ours does for you.” — 1 Thessalonians 3:12"
 };
 
-/* Temperament accent mapping (Sanguine/Choleric/Melancholy/Phlegmatic/Supine palette) */
+/* Temperament accent mapping (Sanguine/Choleric/Melancholy/Phlegmatic/Supine) */
 function temperamentAccentFromKey(k){
   const map = {
-    E: { color: typeColors.Emotional,    bg: typeOpac.Emotional    }, // Sanguine (redish)
-    S: { color: typeColors.Commitment,   bg: typeOpac.Commitment   }, // Choleric (yellowish)
-    R: { color: typeColors.Intellectual, bg: typeOpac.Intellectual }, // Melancholy (bluish/purple)
-    A: { color: typeColors.Affable,      bg: typeOpac.Affable      }, // Phlegmatic (pink)
-    U: { color: typeColors.Partnership,  bg: typeOpac.Partnership  }  // Supine (green)
+    E: { color: typeColors.Emotional,    bg: typeOpac.Emotional    }, // Sanguine
+    S: { color: typeColors.Commitment,   bg: typeOpac.Commitment   }, // Choleric
+    R: { color: typeColors.Intellectual, bg: typeOpac.Intellectual }, // Melancholy
+    A: { color: typeColors.Affable,      bg: typeOpac.Affable      }, // Phlegmatic
+    U: { color: typeColors.Partnership,  bg: typeOpac.Partnership  }  // Supine
   };
   return map[k] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
 }
 function temperamentAccentFromAffKey(k){
-  // Playful→E, Initiative→S, DeepTalk→R, Warmth→A, Support→U
   const t = { Playful:"E", Initiative:"S", DeepTalk:"R", Warmth:"A", Support:"U" }[k];
   return temperamentAccentFromKey(t);
 }
@@ -207,112 +205,93 @@ const affEXP = {
   Support: "You love through action: pitching in, following through, and sharing the load. Your reliability says, “You’re not alone—I'm with you.”"
 };
 const affDES = {
-  Playful: "You feel loved when your spouse keeps things light, playful, and hope-filled—like a little breath of fresh air when life feels heavy.",
+  Playful: "You feel loved when your spouse keeps things light, playful, and hope-filled—like a breath of fresh air when life feels heavy.",
   Initiative: "You feel most cared for when your spouse takes initiative—removing stress, solving a problem, or leading with strength and protection.",
   DeepTalk: "You feel cherished when your spouse slows down, listens deeply, and engages your thoughts and heart with focused, meaningful time.",
   Warmth: "You feel secure with gentle presence, unhurried attention, and comforting touch that says, “I’m here, and you matter.”",
   Support: "You feel honored when your spouse helps practically—sharing responsibilities and showing up consistently in the daily things."
 };
 
-/* Rich copy for Social/Decision (what it looks like + watch-outs + tips) */
+/* Social/Decision details */
 const temperamentDetails = {
-  E: {
-    looks: "You energize the room and move things forward with enthusiasm.",
-    watch: "Fast pace can out-run deeper needs or quieter voices.",
-    tip: "Schedule both lively connection and quiet check-ins to stay balanced."
+  E: { looks:"You energize the room and move things forward with enthusiasm.",
+       watch:"Fast pace can out-run deeper needs or quieter voices.",
+       tip:"Schedule both lively connection and quiet check-ins to stay balanced." },
+  S: { looks:"You provide direction, set goals, and protect progress.",
+       watch:"Decisiveness can feel controlling if not co-authored.",
+       tip:"Invite input early and name where you’re flexible." },
+  R: { looks:"You think deeply, ask great questions, and value thoughtfulness.",
+       watch:"Over-analysis can delay decisions or feel distant.",
+       tip:"Time-box decisions and surface feelings—not just facts." },
+  A: { looks:"You bring calm, keep the peace, and reduce friction.",
+       watch:"Avoiding tension can postpone needed clarity.",
+       tip:"Name one concrete next step even when keeping it gentle." },
+  U: { looks:"You serve steadily, include others, and build trust.",
+       watch:"Understating your needs can lead to quiet resentment.",
+       tip:"Voice one specific need and one boundary you appreciate." }
+};
+
+/* Connection pattern expanded copy (conversational) */
+const patternDetail = {
+  SteadyConnector: {
+    connectionType: "Harmony-focused and steady—your presence calms the room and keeps connection safe.",
+    strengths: "You create a peaceful space where hard conversations feel possible. You’re consistent, fair, and great at lowering tension.",
+    challenges: "You can move past issues too quickly or downplay your own needs to keep the peace, which can leave things unresolved.",
+    tendencies: "In conflict, you often smooth things over fast and avoid going deep, hoping the calm will hold.",
+    coping: "Try a 5–10 minute daily check-in. Name one feeling and one specific need before suggesting solutions."
   },
-  S: {
-    looks: "You provide direction, set goals, and protect progress.",
-    watch: "Decisiveness can feel controlling if not co-authored.",
-    tip: "Invite input early and name where you’re flexible."
+  ReassuranceSeeker: {
+    connectionType: "Attachment-aware and passionate—you lead with heart and crave clarity when things feel off.",
+    strengths: "You fight for closeness and speak up when something feels wrong. You’re empathetic and quick to repair.",
+    challenges: "Needing reassurance now can feel intense to your spouse and escalate emotions if you don’t get it quickly.",
+    tendencies: "In conflict, you pursue answers and closeness immediately, which can feel like pressure to a withdrawing partner.",
+    coping: "Ask for one sentence of reassurance, breathe together, then agree to a short reset before returning to finish the talk."
   },
-  R: {
-    looks: "You think deeply, ask great questions, and value thoughtfulness.",
-    watch: "Over-analysis can delay decisions or feel distant.",
-    tip: "Time-box decisions and surface feelings—not just facts."
+  IndependentConnector: {
+    connectionType: "Thoughtful and composed—you value clarity and reflection to keep connection honest and stable.",
+    strengths: "You think before you speak, de-escalate well, and protect against saying things you don’t mean.",
+    challenges: "Taking space without clarity can feel like distance or shutdown to your spouse.",
+    tendencies: "In conflict, you step back to think. Without a return time, that pause can be heard as disconnection.",
+    coping: "Request space with a clear return time (e.g., 30 minutes). Offer one sentence of reassurance before stepping away."
   },
-  A: {
-    looks: "You bring calm, keep the peace, and reduce friction.",
-    watch: "Avoiding tension can postpone needed clarity.",
-    tip: "Name one concrete next step even when keeping it gentle."
-  },
-  U: {
-    looks: "You serve steadily, include others, and build trust.",
-    watch: "Understating your needs can lead to quiet resentment.",
-    tip: "Voice one specific need and one boundary you appreciate."
+  GuardedConnector: {
+    connectionType: "Careful and loyal—you open slowly and build trust through consistency.",
+    strengths: "You’re dependable and don’t overreact. When you commit, you show up.",
+    challenges: "Caution can look like walls. It’s easy to assume negative intent and protect rather than share.",
+    tendencies: "In conflict, you may go quiet, assume the worst, or agree just to end it—then carry the weight alone.",
+    coping: "Use micro-trust steps: keep one small promise daily, write a short note before hard talks, and name one safe topic to open."
   }
 };
 
-/* Extra nuances for Respect & Recognition */
-function rrExtra(label){
-  if(label==="Strong"){
-    return "You generally feel honored and seen—keep naming specific appreciations to reinforce that culture.";
-  } else if(label==="Moderate"){
-    return "You’re often valued, but clarity helps. Agree on simple ways to say “I see you” each week.";
-  }
-  return "Name the kinds of affirmation that matter to you and invite your spouse to try one daily for a week.";
+/* Personalized strategy sentence starter */
+function nameStrategy(fromName, toName, bondingKey){
+  const base = {
+    SteadyConnector: `${fromName}, try approaching ${toName} by keeping the tone gentle but staying with one feeling and one specific need before you move to solutions.`,
+    ReassuranceSeeker: `${fromName}, try approaching ${toName} by asking for one clear reassurance first, then suggesting a short pause with a promised return time.`,
+    IndependentConnector: `${fromName}, try approaching ${toName} by reassuring them with one sentence, then requesting a brief thinking break and naming exactly when you’ll return.`,
+    GuardedConnector: `${fromName}, try approaching ${toName} by starting small—share one truth you feel safe to say, then invite a next step you can both agree on.`
+  };
+  return base[bondingKey];
 }
-
-/* Extra repair tips for Connection Patterns */
-const patternExtras = {
-  SteadyConnector: "Use a short “check-in” ritual (5 minutes daily) so small tensions resolve early.",
-  ReassuranceSeeker: "Agree on a quick reassurance phrase, then pause to prevent spirals.",
-  IndependentConnector: "Set a clear “return time” after space so distance doesn’t become disconnection.",
-  GuardedConnector: "Start with micro-trust gestures (small keeps) before heavy talk."
-};
 
 /* ================== Flow/State ================== */
 let partnerAName="", partnerBName="";
 let partnerIndex = 0; // 0 = A, 1 = B
-// Steps: 0 rank, 1 expressed, 2 desired, 3 social1, 4 social2, 5 decision1, 6 decision2, 7 rr1, 8 rr2, 9 bond1, 10 bond2, 11 bond3, 12 bond4
 const TOTAL_STEPS = 13;
 let step = 0;
 
 // per-partner answers
 let answers = {
-  rank: [],               // array of 12 type keys
-  expressedTop2: [],      // ["Playful", ...]
-  desiredTop2:   [],      // ["Warmth", ...]
-  social:   {},           // stepIds -> key (E/S/R/A/U)
-  decision: {},           // stepIds -> key (E/S/R/A/U)
-  rr: { rr1:null, rr2:null }, // 0..3
-  bond: {}                // stepIds -> bondingKey
+  rank: [...TYPES],
+  expressedTop2: [],
+  desiredTop2: [],
+  social: {},
+  decision: {},
+  rr: { rr1:null, rr2:null },
+  bond: {}
 };
 
-const bondingInsights = {
-  SteadyConnector:{label:"Steady Connector", desc:"You create a safe space for open communication.",challenges:"You may assume quick talks fix everything.",conflictStyle:"Seeks harmony; may avoid depth."},
-  ReassuranceSeeker:{label:"Reassurance Seeker", desc:"You thrive on frequent affirmations.",challenges:"Validation needs may overwhelm others.",conflictStyle:"May over-pursue reassurance."},
-  IndependentConnector:{label:"Independent Connector", desc:"Calm, steady presence; values space.",challenges:"Space can feel like distance.",conflictStyle:"May withdraw or shut down."},
-  GuardedConnector:{label:"Guarded Connector", desc:"Builds trust gradually; dependable.",challenges:"Caution can slow openness.",conflictStyle:"May assume negative intent."}
-};
-const conflictStrategies = {
-  SteadyConnector:{
-    SteadyConnector:"Both value harmony; use weekly check-ins to address issues early.",
-    ReassuranceSeeker:"Offer explicit affirmations while keeping discussions grounded.",
-    IndependentConnector:"Allow space first, then return to resolve with calm structure.",
-    GuardedConnector:"Slow the pace; listen patiently and avoid pressuring."
-  },
-  ReassuranceSeeker:{
-    SteadyConnector:"Ask for specific reassurance without over-pursuing.",
-    ReassuranceSeeker:"Schedule mutual affirmations; avoid spirals by timing out.",
-    IndependentConnector:"Seek a brief reassurance before honoring space.",
-    GuardedConnector:"Use gentle, concrete requests; avoid escalating tones."
-  },
-  IndependentConnector:{
-    SteadyConnector:"Explain your need for reflection; set a return time.",
-    ReassuranceSeeker:"Offer a quick assurance before stepping back.",
-    IndependentConnector:"Agree on a clear pause-and-return window.",
-    GuardedConnector:"Use structured check-ins; keep tone steady."
-  },
-  GuardedConnector:{
-    SteadyConnector:"Share gradually; acknowledge their harmony focus.",
-    ReassuranceSeeker:"Offer small affirmations to reduce anxiety.",
-    IndependentConnector:"Blend caution with steady pacing and check-ins.",
-    GuardedConnector:"Build trust with small daily gestures before hard topics."
-  }
-};
-
-const profiles = []; // two partner result objects
+const profiles = [];
 
 /* ================== Boot ================== */
 document.getElementById('startBtn').onclick = () => {
@@ -331,7 +310,7 @@ function hideAllPages(){
 function startPartner(idx){
   partnerIndex = idx;
   resetAnswers();
-  hideAllPages();                        /* ensures handoff/result is hidden */
+  hideAllPages();
   document.getElementById('quizPage').classList.remove('hidden');
   document.getElementById('quizTitle').textContent = `Assessment — ${idx===0?partnerAName:partnerBName}`;
   step = 0;
@@ -343,11 +322,8 @@ function resetAnswers(){
 
 /* ================== Render Steps ================== */
 function renderStep(){
-  const progress = document.getElementById('progress');
-  const bar = document.getElementById('progressBar');
-  progress.textContent = `Step ${step+1} of ${TOTAL_STEPS}`;
-  bar.style.width = `${((step+1)/TOTAL_STEPS)*100}%`;
-
+  document.getElementById('progress').textContent = `Step ${step+1} of ${TOTAL_STEPS}`;
+  document.getElementById('progressBar').style.width = `${((step+1)/TOTAL_STEPS)*100}%`;
   const box = document.getElementById('questionContainer');
   box.innerHTML = "";
   document.getElementById('backBtn').style.display = step>0 ? 'block' : 'none';
@@ -413,7 +389,6 @@ function renderStep(){
   ], key => { answers.bond["bond4"]=key; finalizePartner(); });
 }
 
-/* ---------- Step 0: Ranking ---------- */
 function renderRankUI(root){
   const wrap = document.createElement('div');
   wrap.className = 'rank-wrap';
@@ -434,7 +409,7 @@ function renderRankUI(root){
       dragEl = e.target; e.dataTransfer.effectAllowed='move'; e.target.classList.add('dragging');
     }
   });
-  ul.addEventListener('dragend', e=>{ if(dragEl){ dragEl.classList.remove('dragging'); dragEl=null; }});
+  ul.addEventListener('dragend', ()=>{ if(dragEl){ dragEl.classList.remove('dragging'); dragEl=null; }});
   ul.addEventListener('dragover', e=>{
     e.preventDefault();
     const after = getDragAfterElement(ul, e.clientY);
@@ -479,19 +454,13 @@ function refreshRankList(ul){
       </div>
     `;
     const [upBtn, downBtn] = li.querySelectorAll('.rank-actions button');
-    upBtn.onclick = () => {
-      const i = answers.rank.indexOf(k);
-      if(i>0){ [answers.rank[i-1], answers.rank[i]] = [answers.rank[i], answers.rank[i-1]]; refreshRankList(ul); }
-    };
-    downBtn.onclick = () => {
-      const i = answers.rank.indexOf(k);
-      if(i<answers.rank.length-1){ [answers.rank[i+1], answers.rank[i]] = [answers.rank[i], answers.rank[i+1]]; refreshRankList(ul); }
-    };
+    upBtn.onclick = () => { const i = answers.rank.indexOf(k); if(i>0){ [answers.rank[i-1], answers.rank[i]] = [answers.rank[i], answers.rank[i-1]]; refreshRankList(ul); } };
+    downBtn.onclick = () => { const i = answers.rank.indexOf(k); if(i<answers.rank.length-1){ [answers.rank[i+1], answers.rank[i]] = [answers.rank[i], answers.rank[i+1]]; refreshRankList(ul); } };
     ul.appendChild(li);
   });
 }
 
-/* ---------- Pick-2 (steps 1–2) ---------- */
+/* Pick-2 (steps 1–2) */
 const affectionOptions = [
   {key:"Playful", text:"Playful moments and upbeat encouragement"},
   {key:"Initiative", text:"Taking initiative—removing stressors"},
@@ -531,7 +500,7 @@ function labelFor(k){
   return {Playful:"Playful moments", Initiative:"Taking initiative", DeepTalk:"Deep conversation", Warmth:"Warm presence & touch", Support:"Practical support"}[k]||k;
 }
 
-/* ---------- Single-choice helpers ---------- */
+/* Single-choice helper */
 function renderSingleList(root, title, options, onPick){
   root.innerHTML = `<h3 style="text-align:center;">${title}</h3><div class="vertical-list"></div>`;
   const v = root.querySelector('.vertical-list');
@@ -543,20 +512,15 @@ function renderSingleList(root, title, options, onPick){
     v.appendChild(b);
   });
 }
-
-/* Navigation */
 function next(){ step++; if(step<TOTAL_STEPS) renderStep(); else finalizePartner(); }
 
 /* ================== Build profile & results ================== */
 function finalizePartner(){
   const name = partnerIndex===0 ? partnerAName : partnerBName;
 
-  // Social/Decision summaries and top keys
-  const socialCounts = {E:0,S:0,R:0,A:0,U:0};
-  Object.values(answers.social).forEach(k=> socialCounts[k]++);
-  const decisionCounts = {E:0,S:0,R:0,A:0,U:0};
-  Object.values(answers.decision).forEach(k=> decisionCounts[k]++);
-
+  // Social/Decision tops + summaries
+  const socialCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.social).forEach(k=> socialCounts[k]++);
+  const decisionCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.decision).forEach(k=> decisionCounts[k]++);
   const socialTop = Object.entries(socialCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || null;
   const decisionTop = Object.entries(decisionCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || null;
 
@@ -576,32 +540,29 @@ function finalizePartner(){
     U:"You steadily support plans and shared goals."
   })[decisionTop] : "You adapt flexibly to different situations.";
 
-  // Respect & Recognition
+  // R&R
   const rrScore = (answers.rr.rr1 ?? 0) + (answers.rr.rr2 ?? 0);
   const rrLabel = rrScore>=5 ? "Strong" : rrScore>=3 ? "Moderate" : "Needs Attention";
 
-  // Bonding style (from 4 items)
+  // Bonding
   const bondCounts = {SteadyConnector:0, ReassuranceSeeker:0, IndependentConnector:0, GuardedConnector:0};
   Object.values(answers.bond).forEach(k=> bondCounts[k]++);
   const bondingKey = Object.entries(bondCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || "SteadyConnector";
 
   const profile = {
     name,
-    ranking: [...answers.rank],
     coreTypes: answers.rank.slice(0,4),
     growthTypes: answers.rank.slice(4,8),
     untappedTypes: answers.rank.slice(8,12),
     expressedTop2: [...answers.expressedTop2],
     desiredTop2: [...answers.desiredTop2],
-    socialTop, decisionTop,
-    socialSummary, decisionSummary,
-    rrScore, rrLabel,
-    bondingKey
+    socialTop, decisionTop, socialSummary, decisionSummary,
+    rrScore, rrLabel, bondingKey
   };
 
   if(partnerIndex===0){
     profiles[0] = profile;
-    // Handoff card (only between A and B)
+    // Handoff card
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
     document.getElementById('resultsHeader').textContent = "Your Marriage Connection Profile";
@@ -625,11 +586,10 @@ function renderResults(){
   document.getElementById('resultsHeader').textContent = "Your Marriage Connection Profile";
 
   const A = profiles[0], B = profiles[1];
-
   const container = document.createElement('div');
   container.id = "couplesReport";
 
-  /* ================== SECTION 1 ================== */
+  /* ===== Section 1 ===== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 1: Your Intimacy Preferences</h3>
@@ -681,7 +641,7 @@ function renderResults(){
     ])}
   `;
 
-  /* ================== SECTION 2 ================== */
+  /* ===== Section 2 ===== */
   container.innerHTML += `
     <div class="section-divider"></div>
     <h3 class="section-title">Section 2: Relational Dynamics</h3>
@@ -736,7 +696,7 @@ function renderResults(){
     ])}
   `;
 
-  /* ================== SECTION 3 ================== */
+  /* ===== Section 3 ===== */
   const aToB = conflictStrategies[A.bondingKey][B.bondingKey];
   const bToA = conflictStrategies[B.bondingKey][A.bondingKey];
 
@@ -753,8 +713,8 @@ function renderResults(){
     <div class="subsection-divider"></div>
     <h4 class="subsection-title">Personalized Conflict Resolution Strategies</h4>
     <div class="verse">${scripture.conflictStrategies}</div>
-    ${strategyCard(A.name, A.bondingKey, aToB)}
-    ${strategyCard(B.name, B.bondingKey, bToA)}
+    ${strategyCard(A.name, B.name, B.bondingKey, aToB)}
+    ${strategyCard(B.name, A.name, A.bondingKey, bToA)}
 
     <div class="section-divider"></div>
     <div class="result-block" style="border-left-color:transparent; background:#fff;">
@@ -770,7 +730,7 @@ function renderResults(){
   document.getElementById('results').appendChild(container);
 }
 
-/* ---------- results helpers (NO rankedColumn) ---------- */
+/* ---------- results helpers ---------- */
 function typesColumn(name, types){
   return `
     <div class="partner-card"><div class="partner-inner">
@@ -785,31 +745,25 @@ function typesColumn(name, types){
 }
 
 function compassionColumn(p){
-  const expressedBlocks = p.expressedTop2.map(k=>{
+  const exp = p.expressedTop2.map(k=>{
     const acc = temperamentAccentFromAffKey(k);
-    return `
-      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-        <strong>Expressed:</strong> ${affEXP[k]}
-      </div>
-    `;
+    return `<div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+      <strong>Expressed:</strong> ${affEXP[k]}
+    </div>`;
   }).join("");
-  const desiredBlocks = p.desiredTop2.map(k=>{
+  const des = p.desiredTop2.map(k=>{
     const acc = temperamentAccentFromAffKey(k);
-    return `
-      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-        <strong>Most Loved:</strong> ${affDES[k]}
-      </div>
-    `;
+    return `<div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+      <strong>Most Loved:</strong> ${affDES[k]}
+    </div>`;
   }).join("");
   return `
     <div class="partner-card"><div class="partner-inner">
       <div class="partner-header">${p.name}</div>
-
       <div class="partner-subhead"><strong>${p.name} — You Express Love</strong></div>
-      ${expressedBlocks}
-
+      ${exp}
       <div class="partner-subhead"><strong>${p.name} — You Feel Most Loved</strong></div>
-      ${desiredBlocks}
+      ${des}
     </div></div>
   `;
 }
@@ -819,7 +773,6 @@ function buildTemperamentText(topKey, summary){
   const d = temperamentDetails[topKey] || {};
   return `${summary} <br><em>What it looks like:</em> ${d.looks || ""} <br><em>Watch-outs:</em> ${d.watch || ""} <br><em>Helpful tip:</em> ${d.tip || ""}`;
 }
-
 function temperamentBlock(name, title, text, topKey){
   const acc = temperamentAccentFromKey(topKey);
   return `
@@ -829,10 +782,55 @@ function temperamentBlock(name, title, text, topKey){
   `;
 }
 
+/* Expanded Connection Pattern card */
+function patternColumn(p){
+  const map = {
+    SteadyConnector:{ color: typeColors.Partnership,  bg: typeOpac.Partnership },
+    ReassuranceSeeker:{ color: typeColors.Emotional, bg: typeOpac.Emotional },
+    IndependentConnector:{ color: typeColors.Intellectual, bg: typeOpac.Intellectual },
+    GuardedConnector:{ color: typeColors.Conflict,   bg: typeOpac.Conflict }
+  };
+  const acc = map[p.bondingKey] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
+  const d = patternDetail[p.bondingKey];
+
+  return `
+    <div class="partner-card"><div class="partner-inner">
+      <div class="partner-header">${p.name}</div>
+      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+        <p><strong>Connection Type:</strong> ${d.connectionType}</p>
+        <p><strong>Strengths:</strong> You ${d.strengths}</p>
+        <p><strong>Challenges:</strong> You ${d.challenges}</p>
+        <p><strong>Tendencies in Conflict:</strong> ${d.tendencies}</p>
+        <p><strong>Coping Skills:</strong> ${d.coping}</p>
+      </div>
+    </div></div>
+  `;
+}
+
+/* Personalized strategy: addressed by name, colored by the RECEIVER's pattern */
+function strategyCard(fromName, toName, toPatternKey, text){
+  const map = {
+    SteadyConnector:{ color: typeColors.Partnership,  bg: typeOpac.Partnership },
+    ReassuranceSeeker:{ color: typeColors.Emotional, bg: typeOpac.Emotional },
+    IndependentConnector:{ color: typeColors.Intellectual, bg: typeOpac.Intellectual },
+    GuardedConnector:{ color: typeColors.Conflict,   bg: typeOpac.Conflict }
+  };
+  const acc = map[toPatternKey] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
+  const sentence = nameStrategy(fromName, toName, toPatternKey);
+  return `
+    <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
+      <strong>${fromName}, try this with ${toName}:</strong>
+      <p style="margin:6px 0 0;">${sentence}</p>
+      <p style="margin:6px 0 0;"><em>Practical move:</em> ${text}</p>
+    </div>
+  `;
+}
+
+/* RR helpers */
 function rrAccent(label){
-  if(label==="Strong")   return { color:typeColors.Partnership, bg:typeOpac.Partnership };  // green
-  if(label==="Moderate") return { color:typeColors.Commitment,  bg:typeOpac.Commitment  }; // yellow
-  return { color:typeColors.Emotional, bg:typeOpac.Emotional };                              // red
+  if(label==="Strong")   return { color:typeColors.Partnership, bg:typeOpac.Partnership };
+  if(label==="Moderate") return { color:typeColors.Commitment,  bg:typeOpac.Commitment  };
+  return { color:typeColors.Emotional, bg:typeOpac.Emotional };
 }
 function rrCard(p){
   const acc = rrAccent(p.rrLabel);
@@ -844,74 +842,13 @@ function rrCard(p){
     </div>
   `;
 }
-
-function patternColumn(p){
-  const accMap = {
-    SteadyConnector:{ color: typeColors.Partnership,  bg: typeOpac.Partnership  },
-    ReassuranceSeeker:{ color: typeColors.Emotional, bg: typeOpac.Emotional },
-    IndependentConnector:{ color: typeColors.Intellectual, bg: typeOpac.Intellectual },
-    GuardedConnector:{ color: typeColors.Conflict,   bg: typeOpac.Conflict   }
-  };
-  const info = {
-    SteadyConnector:{label:"Steady Connector", desc:"You create a safe space for open communication.",challenges:"You may assume quick talks fix everything.",conflictStyle:"Seeks harmony; may avoid depth."},
-    ReassuranceSeeker:{label:"Reassurance Seeker", desc:"You thrive on frequent affirmations.",challenges:"Validation needs may overwhelm others.",conflictStyle:"May over-pursue reassurance."},
-    IndependentConnector:{label:"Independent Connector", desc:"Calm, steady presence; values space.",challenges:"Space can feel like distance.",conflictStyle:"May withdraw or shut down."},
-    GuardedConnector:{label:"Guarded Connector", desc:"Builds trust gradually; dependable.",challenges:"Caution can slow openness.",conflictStyle:"May assume negative intent."}
-  }[p.bondingKey];
-
-  const acc = accMap[p.bondingKey] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
-  return `
-    <div class="partner-card"><div class="partner-inner">
-      <div class="partner-header">${p.name}</div>
-      <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-        <strong>${info.label}</strong>
-        <p><strong>Strengths:</strong> ${info.desc}</p>
-        <p><strong>Challenges:</strong> ${info.challenges}</p>
-        <p><strong>Typical in Tension:</strong> ${info.conflictStyle}</p>
-        <p style="margin:6px 0 0;"><em>What helps:</em> ${patternExtras[p.bondingKey]}</p>
-      </div>
-    </div></div>
-  `;
-}
-
-function strategyCard(name, bondingKey, text){
-  const acc = {
-    SteadyConnector:{ color: typeColors.Partnership,  bg: typeOpac.Partnership  },
-    ReassuranceSeeker:{ color: typeColors.Emotional, bg: typeOpac.Emotional },
-    IndependentConnector:{ color: typeColors.Intellectual, bg: typeOpac.Intellectual },
-    GuardedConnector:{ color: typeColors.Conflict,   bg: typeOpac.Conflict   }
-  }[bondingKey] || { color:"#4D9DE0", bg:"rgba(77,157,224,.08)" };
-  const label = {
-    SteadyConnector:"Steady Connector",
-    ReassuranceSeeker:"Reassurance Seeker",
-    IndependentConnector:"Independent Connector",
-    GuardedConnector:"Guarded Connector"
-  }[bondingKey] || "Connection Pattern";
-  return `
-    <div class="result-block" style="border-left-color:${acc.color}; background:${acc.bg};">
-      <strong>${name} — ${label}</strong>
-      <p style="margin:8px 0 0;">${text}</p>
-    </div>
-  `;
-}
-
-function affText(k){
-  return {
-    Playful:"Playful moments & encouragement",
-    Initiative:"Taking initiative / removing stress",
-    DeepTalk:"Deep conversation & focused time",
-    Warmth:"Warm presence & gentle touch",
-    Support:"Practical support & teamwork"
-  }[k]||k;
-}
-
 function rrStatement(score){
   if(score>=5) return "You generally feel affirmed, appreciated, respected, and validated—and you likely offer the same in return.";
   if(score>=3) return "You often feel appreciated and respected, though there may be moments when clearer affirmation would be meaningful.";
   return "You may not consistently feel affirmed or validated; be explicit about the kinds of appreciation that help you feel respected.";
 }
 
-/* Discussion Prompts block */
+/* Prompts */
 function promptsBlock(items){
   return `
     <div class="prompt-block">
