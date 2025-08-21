@@ -283,12 +283,40 @@ const patternExtras = {
   GuardedConnector: "Start with micro-trust steps before heavier talks."
 };
 
+/* 2×2 conflict strategies text (for practical tip line) */
+const conflictStrategies = {
+  SteadyConnector: {
+    SteadyConnector: "Use weekly check-ins to catch small tensions early.",
+    ReassuranceSeeker: "Offer explicit reassurance first, then discuss calmly.",
+    IndependentConnector: "Give brief space, then return at an agreed time.",
+    GuardedConnector: "Slow the pace; invite one small truth at a time."
+  },
+  ReassuranceSeeker: {
+    SteadyConnector: "Ask for one clear reassurance, then breathe together.",
+    ReassuranceSeeker: "Time-box mutual reassurance to prevent spirals.",
+    IndependentConnector: "Request one sentence of reassurance before space.",
+    GuardedConnector: "Use gentle, concrete requests—no rapid-fire questions."
+  },
+  IndependentConnector: {
+    SteadyConnector: "Explain your need for reflection; set a return time.",
+    ReassuranceSeeker: "Offer quick assurance first, then reflect briefly.",
+    IndependentConnector: "Agree on a pause-and-return window you both keep.",
+    GuardedConnector: "Use structured check-ins; keep tone steady."
+  },
+  GuardedConnector: {
+    SteadyConnector: "Share gradually; acknowledge their harmony focus.",
+    ReassuranceSeeker: "Offer small affirmations to reduce anxiety.",
+    IndependentConnector: "Blend caution with steady pacing and check-ins.",
+    GuardedConnector: "Build trust with daily micro-keeps before hard topics."
+  }
+};
+
 /* ================== Flow/State ================== */
 let partnerAName="", partnerBName="";
 let partnerIndex = 0; // 0 = A, 1 = B
 const TOTAL_STEPS = 13;
 let step = 0;
-let resultsShown = false; 
+let resultsShown = false;  /* guard: results render once */
 
 /* per-partner answers */
 let answers = {
@@ -535,8 +563,6 @@ function next(){ step++; if(step<TOTAL_STEPS) renderStep(); else finalizePartner
 function finalizePartner(){
   const name = partnerIndex===0 ? partnerAName : partnerBName;
 
-  // ---- Build summaries for this partner ----
-  // Social & Decision tops + summaries
   const socialCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.social).forEach(k=> socialCounts[k]++);
   const decisionCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.decision).forEach(k=> decisionCounts[k]++);
   const socialTop = Object.entries(socialCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || null;
@@ -558,16 +584,13 @@ function finalizePartner(){
     U:"You steadily support plans and shared goals."
   })[decisionTop] : "You adapt flexibly to different situations.";
 
-  // Respect & Recognition
   const rrScore = (answers.rr.rr1 ?? 0) + (answers.rr.rr2 ?? 0);
   const rrLabel = rrScore>=5 ? "Strong" : rrScore>=3 ? "Moderate" : "Needs Attention";
 
-  // Bonding / connection pattern
   const bondCounts = {SteadyConnector:0, ReassuranceSeeker:0, IndependentConnector:0, GuardedConnector:0};
   Object.values(answers.bond).forEach(k=> bondCounts[k]++);
   const bondingKey = Object.entries(bondCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || "SteadyConnector";
 
-  // Build the partner profile object
   const profile = {
     name,
     coreTypes: answers.rank.slice(0,4),
@@ -579,9 +602,7 @@ function finalizePartner(){
     rrScore, rrLabel, bondingKey
   };
 
-  // ---- Flow control: A -> handoff; B -> show results (once) ----
   if (partnerIndex === 0) {
-    // Partner A done → show the handoff card
     profiles[0] = profile;
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
@@ -594,15 +615,13 @@ function finalizePartner(){
       </div>
     `;
   } else {
-    // Partner B done → store B and render results ONCE
     profiles[1] = profile;
     if (!resultsShown) {
-      resultsShown = true;      // <--- guard so it can't restart
-      renderResults();          // <--- show the results now
+      resultsShown = true;
+      renderResults();
     }
   }
 }
-
 
 /* ---------- Results Renderer ---------- */
 function renderResults(){
