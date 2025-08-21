@@ -288,7 +288,7 @@ let partnerAName="", partnerBName="";
 let partnerIndex = 0; // 0 = A, 1 = B
 const TOTAL_STEPS = 13;
 let step = 0;
-let resultsShown = false;  /* guard: results render once */
+let resultsShown = false; 
 
 /* per-partner answers */
 let answers = {
@@ -535,6 +535,8 @@ function next(){ step++; if(step<TOTAL_STEPS) renderStep(); else finalizePartner
 function finalizePartner(){
   const name = partnerIndex===0 ? partnerAName : partnerBName;
 
+  // ---- Build summaries for this partner ----
+  // Social & Decision tops + summaries
   const socialCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.social).forEach(k=> socialCounts[k]++);
   const decisionCounts = {E:0,S:0,R:0,A:0,U:0}; Object.values(answers.decision).forEach(k=> decisionCounts[k]++);
   const socialTop = Object.entries(socialCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || null;
@@ -556,13 +558,16 @@ function finalizePartner(){
     U:"You steadily support plans and shared goals."
   })[decisionTop] : "You adapt flexibly to different situations.";
 
+  // Respect & Recognition
   const rrScore = (answers.rr.rr1 ?? 0) + (answers.rr.rr2 ?? 0);
   const rrLabel = rrScore>=5 ? "Strong" : rrScore>=3 ? "Moderate" : "Needs Attention";
 
+  // Bonding / connection pattern
   const bondCounts = {SteadyConnector:0, ReassuranceSeeker:0, IndependentConnector:0, GuardedConnector:0};
   Object.values(answers.bond).forEach(k=> bondCounts[k]++);
   const bondingKey = Object.entries(bondCounts).sort((a,b)=>b[1]-a[1])[0]?.[0] || "SteadyConnector";
 
+  // Build the partner profile object
   const profile = {
     name,
     coreTypes: answers.rank.slice(0,4),
@@ -574,7 +579,9 @@ function finalizePartner(){
     rrScore, rrLabel, bondingKey
   };
 
-  if(partnerIndex===0){
+  // ---- Flow control: A -> handoff; B -> show results (once) ----
+  if (partnerIndex === 0) {
+    // Partner A done → show the handoff card
     profiles[0] = profile;
     document.getElementById('quizPage').classList.add('hidden');
     document.getElementById('resultPage').classList.remove('hidden');
@@ -587,13 +594,15 @@ function finalizePartner(){
       </div>
     `;
   } else {
+    // Partner B done → store B and render results ONCE
     profiles[1] = profile;
-    if (!resultsShown) {  /* GUARD: only render once */
-      resultsShown = true;
-      renderResults();
+    if (!resultsShown) {
+      resultsShown = true;      // <--- guard so it can't restart
+      renderResults();          // <--- show the results now
     }
   }
 }
+
 
 /* ---------- Results Renderer ---------- */
 function renderResults(){
